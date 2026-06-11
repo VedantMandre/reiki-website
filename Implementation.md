@@ -101,7 +101,7 @@ Sitemap: https://<site-url>/sitemap.xml
 
 ## Phase D — Deployment (free)
 
-1. ⏳ Feature branch is committed & pushed (`feature/light-theme-and-contact-updates`). **Action needed:** open a PR and merge to `main` (or merge directly), then push `main` to GitHub.
+1. ✅ Merged `feature/light-theme-and-contact-updates` into `main` and pushed to GitHub.
 2. ⏳ **Action needed (GitHub UI):** Settings → Pages → Deploy from branch → `main` / root. Site will be live at `https://vedantmandre.github.io/reiki-website/`.
 3. ✅ Canonical URL, `og:url`, sitemap `<loc>`, and robots.txt sitemap line already use `https://vedantmandre.github.io/reiki-website/`.
 4. ⏳ **Action needed (Google account):** Search Console — verify property, submit sitemap.
