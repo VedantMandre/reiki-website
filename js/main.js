@@ -74,9 +74,10 @@
     sections.forEach(function (s) { sectionObserver.observe(s); });
   }
 
-  /* Contact form — client-side handling (no backend wired up yet) */
+  /* Contact form — submitted via FormSubmit's AJAX endpoint */
   var form = document.getElementById("contactForm");
   var note = document.getElementById("formNote");
+  var submitBtn = form.querySelector("button[type='submit']");
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -87,20 +88,30 @@
     }
 
     var name = form.elements.name.value.trim();
-    var service = form.elements.service.options[form.elements.service.selectedIndex].text;
-    var message = form.elements.message.value.trim();
+    var endpoint = "https://formsubmit.co/ajax/sujata.mandre@gmail.com";
 
-    /* Until a backend or form service is connected, open the
-       visitor's mail client with a pre-filled message. */
-    var subject = encodeURIComponent("Inquiry: " + service);
-    var body = encodeURIComponent(
-      "Hello Sujata,\n\n" + message + "\n\nWarm regards,\n" + name
-    );
-    window.location.href =
-      "mailto:sujata.mandre@gmail.com?subject=" + subject + "&body=" + body;
+    submitBtn.disabled = true;
+    note.textContent = "Sending your message…";
 
-    note.textContent = "Thank you, " + name + " — your email app should open shortly. ✦";
-    form.reset();
+    fetch(endpoint, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: new FormData(form),
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error("Request failed");
+        return response.json();
+      })
+      .then(function () {
+        note.textContent = "Thank you, " + name + " — your message has been sent. Sujata will be in touch soon. ✦";
+        form.reset();
+      })
+      .catch(function () {
+        note.textContent = "Something went wrong. Please email sujata.mandre@gmail.com directly or try again.";
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+      });
   });
 
   /* Footer year */
