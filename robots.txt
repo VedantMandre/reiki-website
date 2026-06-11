@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vedantmandre.github.io/reiki-website/sitemap.xml
