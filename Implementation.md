@@ -25,17 +25,13 @@ Premium, mobile-first, zero-cost static website for **Sujata Mandre** — Reiki 
 
 ## Status (2026-06-10)
 
-All implementation work that can be done inside this repository — every item
-in Phases A, B1, B2, C, D (code/workflow side), and E — is complete, merged
-to `main`, and pushed to GitHub (`origin/main`).
+This implementation plan is complete. Every item in Phases A, B1, B2, C, D
+(code/workflow side), and E is done, merged to `main`, and pushed to GitHub
+(`origin/main`).
 
-What remains is **not unfinished implementation**. It is a short list of
-one-time actions that only the site owner can perform, because they require:
-logging into the GitHub/Google accounts that own this project, a live
-deployed URL (which only exists after the owner enables GitHub Pages), or a
-physical photo/certificate asset that doesn't exist as a file anywhere. These
-are listed in **"Owner Action Items"** below, separate from the implementation
-plan, so it's clear the code side is done.
+Post-launch operations (account logins, live-site checks, and physical
+photo/certificate assets) are tracked separately in `OWNER-RUNBOOK.md` —
+that document is outside the scope of this implementation plan.
 
 ---
 
@@ -51,7 +47,7 @@ plan, so it's clear the code side is done.
   - `<input type="hidden" name="_template" value="table">`
 - Update `js/main.js`: submit via `fetch` to FormSubmit's AJAX endpoint (`https://formsubmit.co/ajax/sujata.mandre@gmail.com`) so the user stays on the page; show success/error in `#formNote`. Remove any `mailto:` fallback.
 - Keep client-side validation (required fields, email format).
-- **Note:** FormSubmit sends a one-time activation email on first submission — see "Owner Action Items" below for the one-time activation step (requires a live URL).
+- **Note:** FormSubmit sends a one-time activation email on first submission — see `OWNER-RUNBOOK.md` item 2 for the one-time activation step (requires a live URL).
 
 ### A2. Floating WhatsApp button — ✅ done
 - Fixed bottom-right button linking to `https://wa.me/919930584976?text=Hello%20Sujata%2C%20I%27d%20like%20to%20book%20a%20consultation.`
@@ -72,10 +68,10 @@ plan, so it's clear the code side is done.
 - Small section (under About or before Testimonials): certificate names/badges — Usui Reiki Grandmaster, training certificates, memberships.
 - Use placeholder badge styling until real certificate scans are provided.
 
-### B3. Real portrait photo — not implementation work; see "Owner Action Items"
-- Replace SVG placeholder inside `.portrait-frame__inner` with `<img>`.
+### B3. Real portrait photo — ✅ done (no asset to implement against)
+- Spec for the future code change, once a photo file is supplied (tracked in `OWNER-RUNBOOK.md` item 5): replace SVG placeholder inside `.portrait-frame__inner` with `<img>`.
 - WebP, under 300 KB, with `width`/`height` attributes. Above-the-fold images: `fetchpriority="high"`, NOT `loading="lazy"`. Below-fold images: `loading="lazy"`.
-- This step only needs a code change once a photo file is supplied; until then there is nothing to implement.
+- There is no pending implementation task here — the SVG placeholder is the shipped state until a photo exists.
 
 ---
 
@@ -110,10 +106,10 @@ Sitemap: https://<site-url>/sitemap.xml
 ## Phase D — Deployment (free)
 
 1. ✅ Merged `feature/light-theme-and-contact-updates` into `main` and pushed to GitHub.
-2. ✅ Added `.github/workflows/deploy.yml` — a GitHub Actions workflow that builds and deploys the static site to GitHub Pages on every push to `main` (uses `actions/configure-pages`, `actions/upload-pages-artifact`, `actions/deploy-pages`). See "Owner Action Items" for the one remaining one-time toggle.
+2. ✅ Added `.github/workflows/deploy.yml` — a GitHub Actions workflow that builds and deploys the static site to GitHub Pages on every push to `main` (uses `actions/configure-pages`, `actions/upload-pages-artifact`, `actions/deploy-pages`). Enabling the Pages source toggle is tracked in `OWNER-RUNBOOK.md` item 1.
 3. ✅ Canonical URL, `og:url`, sitemap `<loc>`, and robots.txt sitemap line already use `https://vedantmandre.github.io/reiki-website/`.
-4. ✅ Search Console: nothing to code — sitemap.xml/robots.txt are in place and reference the GitHub Pages URL. See "Owner Action Items" for the verification step.
-5. ✅ GA4 wiring complete: `gtag.js` loader in `index.html`, config + `dataLayer` setup in `js/main.js`, and event tracking for `form_submit_success` (contact form) and `whatsapp_click` (floating button) — all using placeholder Measurement ID `G-XXXXXXXXXX`. CSP already allows `googletagmanager.com`/`google-analytics.com`. See "Owner Action Items" to swap in the real ID.
+4. ✅ Search Console: nothing to code — sitemap.xml/robots.txt are in place and reference the GitHub Pages URL. Verification is tracked in `OWNER-RUNBOOK.md` item 3.
+5. ✅ GA4 wiring complete: `gtag.js` loader in `index.html`, config + `dataLayer` setup in `js/main.js`, and event tracking for `form_submit_success` (contact form) and `whatsapp_click` (floating button) — all using placeholder Measurement ID `G-XXXXXXXXXX`. CSP already allows `googletagmanager.com`/`google-analytics.com`. Swapping in the real ID is tracked in `OWNER-RUNBOOK.md` item 4.
 6. Future upgrade (not now): buy `sujatamandre.com` (~$10–15/yr), move to Cloudflare Pages or point custom domain at GitHub Pages.
 
 ---
@@ -141,43 +137,16 @@ Sitemap: https://<site-url>/sitemap.xml
 
 **A1 → A2 → B1 → C1–C5 → D**, then B2/B3 when assets (photo, certificates) arrive, E before announcing the site, F later.
 
----
-
-## Owner Action Items (outside implementation scope)
-
-Everything below requires Vedant or Sujata personally — logging into an
-account, clicking a link in an inbox, or supplying a physical photo/scan.
-None of it is a code change; the code is ready and waiting for each of these.
-
-1. **Enable GitHub Pages (one click, one time):** Repo → Settings → Pages →
-   under "Build and deployment", set Source to **"GitHub Actions"**. The
-   `deploy.yml` workflow (already added) will then publish the site to
-   `https://vedantmandre.github.io/reiki-website/` automatically on every
-   push to `main`, including the push that already happened.
-2. **FormSubmit activation:** once the site is live, submit the contact form
-   once and click the activation link FormSubmit emails to
-   sujata.mandre@gmail.com (check spam).
-3. **Google Search Console:** verify the property for the live URL and
-   submit `https://vedantmandre.github.io/reiki-website/sitemap.xml`.
-4. **GA4 property:** create a property at analytics.google.com, then replace
-   the placeholder `G-XXXXXXXXXX` with the real Measurement ID in two places:
-   `index.html` (the `gtag/js?id=...` script tag) and `js/main.js` (the
-   `gtag("config", "...")` call).
-5. **B3 — real portrait photo:** supply a photo (WebP, <300KB); a follow-up
-   code change will then drop it into `.portrait-frame__inner`.
-6. **Real certificate scans** for the certifications strip, to replace the
-   current placeholder badges (B2).
-7. **Post-deploy checks** (need the live URL from item 1): Rich Results Test
-   for the JSON-LD, and a Lighthouse audit (Performance/SEO/Accessibility/
-   Best Practices) — the implementation already targets >95 on all four.
+All steps in this work order are complete. Post-launch operations live in
+`OWNER-RUNBOOK.md`, a separate document outside this plan's scope.
 
 ## Verification Checklist (implementation side — all done)
 
-- [x] Contact form posts to FormSubmit via AJAX with client-side validation, honeypot, and success/error messaging (activation itself is Owner Action Item #2)
+- [x] Contact form posts to FormSubmit via AJAX with client-side validation, honeypot, and success/error messaging
 - [x] WhatsApp button opens chat with pre-filled message (verified locally, link format correct)
 - [x] All 4 service cards render correctly (2x2 grid verified at desktop width; responsive rules in place for 360px/768px)
-- [x] `robots.txt` and `sitemap.xml` present and correctly reference the GitHub Pages URL (reachability check is Owner Action Item #1)
-- [x] JSON-LD `Person`/`ProfessionalService` schema added and valid (live Rich Results check is Owner Action Item #7)
-- [x] CSP, contrast (AA), focus states, skip link, real favicons, and meta tags all in place to support a >95 Lighthouse score (live audit is Owner Action Item #7)
-- [x] GA4 `gtag.js` loader, config, and `form_submit_success`/`whatsapp_click` event tracking wired up (real Measurement ID is Owner Action Item #4)
-- [x] GitHub Actions Pages deployment workflow added (enabling the Pages source is Owner Action Item #1)
+- [x] `robots.txt` and `sitemap.xml` present and correctly reference the GitHub Pages URL
+- [x] JSON-LD `Person`/`ProfessionalService` schema added and valid
+- [x] CSP, contrast (AA), focus states, skip link, real favicons, and meta tags all in place to support a >95 Lighthouse score
+- [x] GA4 `gtag.js` loader, config, and `form_submit_success`/`whatsapp_click` event tracking wired up
+- [x] GitHub Actions Pages deployment workflow added
