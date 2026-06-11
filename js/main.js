@@ -97,7 +97,7 @@
       "Hello Sujata,\n\n" + message + "\n\nWarm regards,\n" + name
     );
     window.location.href =
-      "mailto:hello@sujatamandre.com?subject=" + subject + "&body=" + body;
+      "mailto:sujata.mandre@gmail.com?subject=" + subject + "&body=" + body;
 
     note.textContent = "Thank you, " + name + " — your email app should open shortly. ✦";
     form.reset();
