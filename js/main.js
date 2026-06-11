@@ -3,6 +3,15 @@
 (function () {
   "use strict";
 
+  /* Google Analytics 4 — config lives here (not inline in index.html) so the
+     script-src CSP doesn't need 'unsafe-inline'. TODO: the loader tag in
+     index.html still has the placeholder ID G-XXXXXXXXXX; replace it there
+     once a real GA4 property exists. */
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag("js", new Date());
+  gtag("config", "G-XXXXXXXXXX");
+
   var nav = document.getElementById("nav");
   var navToggle = document.getElementById("navToggle");
   var navLinks = document.getElementById("navLinks");
@@ -104,6 +113,7 @@
       })
       .then(function () {
         note.textContent = "Thank you, " + name + " — your message has been sent. Sujata will be in touch soon. ✦";
+        gtag("event", "form_submit_success", { event_category: "contact", event_label: "contact_form" });
         form.reset();
       })
       .catch(function () {
@@ -113,6 +123,14 @@
         submitBtn.disabled = false;
       });
   });
+
+  /* WhatsApp button click tracking */
+  var whatsappFab = document.querySelector(".whatsapp-fab");
+  if (whatsappFab) {
+    whatsappFab.addEventListener("click", function () {
+      gtag("event", "whatsapp_click", { event_category: "engagement", event_label: "floating_button" });
+    });
+  }
 
   /* Footer year */
   document.getElementById("year").textContent = new Date().getFullYear();
