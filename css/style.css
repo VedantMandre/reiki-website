@@ -1184,22 +1184,70 @@ h1, h2, h3 {
     flex-direction: column;
     justify-content: center;
     gap: 1.6rem;
+    padding: calc(var(--nav-h) + 1rem) 1.5rem 2rem;
+    overflow-y: auto;
     background:
       radial-gradient(700px 500px at 70% 20%, rgba(201, 178, 228, 0.35), transparent 60%),
       var(--cream);
     transform: translateY(-100%);
-    transition: transform 0.6s var(--ease-out);
+    /* visibility/opacity keep the closed menu fully hidden even if an
+       ancestor transform ever confines the fixed overlay (defense in depth). */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.6s var(--ease-out), opacity 0.4s var(--ease-out), visibility 0.6s;
   }
-  .nav__links.is-open { transform: translateY(0); }
+  .nav__links.is-open {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
   .nav__link { font-size: 1.6rem; font-family: var(--font-display); letter-spacing: 0.02em; }
   .nav__cta { margin-top: 0.8rem; }
 }
 
 @media (max-width: 560px) {
+  /* Shorter bar + tighter section rhythm so phones aren't mostly whitespace */
+  :root { --nav-h: 68px; }
+  .container { width: min(1180px, 90vw); }
+  .section { padding: clamp(3.5rem, 13vw, 5rem) 0; }
+
   .journey__steps { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
-  .hero__stats { flex-wrap: wrap; gap: 1.4rem 2rem; }
+
+  .hero { padding: calc(var(--nav-h) + 1.5rem) 0 3.5rem; }
+  .hero__eyebrow { font-size: 0.66rem; letter-spacing: 0.22em; margin-bottom: 1.1rem; }
+  .hero__lead { margin-bottom: 2rem; }
+
+  /* Full-width stacked CTAs read cleaner than wrapped pills on narrow screens */
+  .hero__actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+  .hero__actions .btn { width: 100%; }
+
+  .hero__stats {
+    justify-content: space-between;
+    gap: 1.2rem;
+    text-align: center;
+  }
+  .hero__stats li { justify-items: center; }
+
+  .marquee__item { font-size: 1.1rem; }
+  .marquee__track { gap: 1.8rem; padding-right: 1.8rem; }
+
+  .about__highlights li,
+  .contact__channels li { gap: 0.85rem; }
+
   .footer__wordmark { white-space: normal; }
+}
+
+@media (max-width: 380px) {
+  /* Very small handsets: pull the largest type down a touch more */
+  .hero__title { font-size: clamp(2.7rem, 15vw, 3.2rem); }
+  .nav__brand-text { font-size: 1.2rem; }
+  .nav__logo { width: 38px; }
+  .section-title { font-size: clamp(1.8rem, 8vw, 2.2rem); }
+  .card { padding: 1.9rem 1.4rem 1.6rem; }
+  .btn { padding: 0.9rem 1.6rem; }
 }
 
 /* ---------- Reduced motion ---------- */

@@ -83,7 +83,10 @@
 
     var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.from(".nav__inner", { y: -30, autoAlpha: 0, duration: 0.8 }, 0);
+    /* clearProps wipes the residual inline transform GSAP leaves behind:
+       a transform on .nav__inner would make it the containing block for the
+       position:fixed mobile menu, breaking its full-screen overlay. */
+    tl.from(".nav__inner", { y: -30, autoAlpha: 0, duration: 0.8, clearProps: "all" }, 0);
     tl.from(".hero__eyebrow", { y: 24, autoAlpha: 0, duration: 0.7 }, 0.1);
 
     var titleLines = document.querySelectorAll(".hero__title-line");
