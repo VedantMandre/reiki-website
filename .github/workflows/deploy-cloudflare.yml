@@ -1,0 +1,23 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: "cloudflare-pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: a238f0124b7c58a63a6c1dd65d83f178
+          command: pages deploy . --project-name=suved-healing --branch=main
