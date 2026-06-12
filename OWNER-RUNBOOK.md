@@ -1,4 +1,4 @@
-# Owner Runbook — Sujata Mandre Website
+# Owner Runbook — Suved Healing Website
 
 This is a separate, post-implementation operations runbook. It is **not**
 part of the implementation plan (see `Implementation.md`, where every item
@@ -28,3 +28,20 @@ and pushed to `main`.
 7. **Post-deploy checks** (need the live URL from item 1): Rich Results Test
    for the JSON-LD, and a Lighthouse audit (Performance/SEO/Accessibility/
    Best Practices) — the implementation already targets >95 on all four.
+
+## Suved Healing rebrand follow-ups (June 2026)
+
+The site was redesigned and renamed to **Suved Healing** (logo at
+`assets/suved-logo.png`, used in the nav, about section, and footer;
+`favicon.svg` was redrawn as a lotus mark in the new palette). Two asset
+sets still carry the old branding and need image tooling to regenerate:
+
+8. **PNG favicons** (`favicon.ico`, `favicon-16/32x32.png`,
+   `apple-touch-icon.png`, `android-chrome-192/512.png`): regenerate from
+   `favicon.svg` or the logo at https://realfavicongenerator.net and
+   replace the files in the repo root.
+9. **Social share image** (`assets/og-image.png`): create a 1200×630 image
+   from the Suved Healing logo/palette. The page currently points OG/Twitter
+   tags at `assets/suved-logo.png` (square), which works but a proper
+   1200×630 banner renders better; update the `og:image`/`twitter:image`
+   tags in `index.html` when ready.
