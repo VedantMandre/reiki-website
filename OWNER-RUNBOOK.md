@@ -32,9 +32,13 @@ and pushed to `main`.
 ## Suved Healing rebrand follow-ups (June 2026)
 
 The site was redesigned and renamed to **Suved Healing** (logo at
-`assets/suved-logo.png`, used in the nav, about section, and footer;
-`favicon.svg` was redrawn as a lotus mark in the new palette). Two asset
-sets still carry the old branding and need image tooling to regenerate:
+`assets/suved-logo.png`, used for OG/Twitter previews and JSON-LD;
+`favicon.svg` was redrawn as a lotus mark in the new palette). The nav,
+about section, and footer instead use `assets/suved-emblem.png` — the
+same artwork with its background keyed to transparent — as a "living
+emblem": it breathes, glows, and (in the about section) drifts gold dust
+via CSS animations and `initEmblemDust()` in `js/main.js`. Two asset sets
+still carry the old branding and need image tooling to regenerate:
 
 8. **PNG favicons** (`favicon.ico`, `favicon-16/32x32.png`,
    `apple-touch-icon.png`, `android-chrome-192/512.png`): regenerate from
