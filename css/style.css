@@ -320,7 +320,6 @@ h1, h2, h3 {
 .nav__logo {
   width: 44px;
   height: auto;
-  border-radius: 10px;
   filter: drop-shadow(0 3px 8px rgba(70, 48, 110, 0.2));
 }
 
@@ -683,6 +682,128 @@ h1, h2, h3 {
   border-radius: 999px;
   box-shadow: 0 10px 24px -10px rgba(184, 134, 46, 0.6);
 }
+
+/* ---------- Living emblem (brand mark, animated) ---------- */
+
+/* Small variant — nav + footer brand icon: a soft breathing glow,
+   no layered glow elements so it stays cheap when repeated. */
+.emblem-sm {
+  animation: emblemSmBreathe 6s ease-in-out infinite;
+  transform-origin: 50% 58%;
+}
+@keyframes emblemSmBreathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 3px 8px rgba(70, 48, 110, 0.2)) drop-shadow(0 0 0 rgba(212, 169, 79, 0));
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 3px 10px rgba(70, 48, 110, 0.26)) drop-shadow(0 0 7px rgba(212, 169, 79, 0.6));
+  }
+}
+
+/* Large variant — the About section centerpiece: breathing scale,
+   a heartbeat glow at the chest, a swelling sun halo with rotating
+   rays, a violet lotus under-glow, a travelling ring glint, and
+   drifting gold dust. Percentage positions are calibrated to the
+   555:525 artwork and its transparent-cut PNG. */
+.emblem-lg { position: relative; }
+.emblem-lg__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 555 / 525;
+  animation: emblemLgBreathe 8s ease-in-out infinite;
+  transform-origin: 56% 62%;
+}
+@keyframes emblemLgBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.018); }
+}
+.emblem-lg__art {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.emblem-lg__glow { position: absolute; pointer-events: none; mix-blend-mode: screen; border-radius: 50%; }
+
+.emblem-lg__glow--heart {
+  left: 56.2%; top: 47.2%; width: 26%; height: 27%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(212, 169, 79, 0.95), rgba(212, 169, 79, 0.35) 45%, transparent 72%);
+  animation: emblemHeartbeat 8s ease-in-out infinite;
+  filter: blur(2px);
+}
+@keyframes emblemHeartbeat {
+  0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.9); }
+  38%      { opacity: 0.95; transform: translate(-50%, -50%) scale(1.12); }
+  46%      { opacity: 0.6;  transform: translate(-50%, -50%) scale(1.0); }
+  54%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.1); }
+  70%      { opacity: 0.4;  transform: translate(-50%, -50%) scale(0.92); }
+}
+
+.emblem-lg__glow--sun {
+  left: 56.8%; top: 29%; width: 44%; height: 46%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(228, 195, 122, 0.75), rgba(212, 169, 79, 0.22) 50%, transparent 74%);
+  animation: emblemSunSwell 8s ease-in-out infinite;
+  filter: blur(3px);
+}
+@keyframes emblemSunSwell {
+  0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.94); }
+  50%      { opacity: 0.85; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.emblem-lg__rays {
+  position: absolute; left: 56.8%; top: 29.5%; width: 38%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none; mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(closest-side, black 20%, transparent 72%);
+  mask-image: radial-gradient(closest-side, black 20%, transparent 72%);
+  opacity: 0.5;
+}
+.emblem-lg__rays::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    transparent 0deg,  rgba(228, 195, 122, 0.9) 8deg,  transparent 16deg,
+    transparent 60deg, rgba(228, 195, 122, 0.7) 68deg, transparent 76deg,
+    transparent 130deg,rgba(228, 195, 122, 0.8) 138deg,transparent 146deg,
+    transparent 200deg,rgba(228, 195, 122, 0.7) 208deg,transparent 216deg,
+    transparent 270deg,rgba(228, 195, 122, 0.85) 278deg,transparent 286deg,
+    transparent 330deg,rgba(228, 195, 122, 0.7) 338deg,transparent 346deg);
+  animation: emblemRaysTurn 40s linear infinite;
+  filter: blur(1.5px);
+}
+@keyframes emblemRaysTurn { to { transform: rotate(360deg); } }
+
+.emblem-lg__glow--lotus {
+  left: 56%; top: 76%; width: 56%; height: 34%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(157, 111, 196, 0.5), rgba(157, 111, 196, 0.18) 55%, transparent 78%);
+  animation: emblemLotusGlow 8s ease-in-out infinite;
+  animation-delay: -2s;
+  filter: blur(4px);
+}
+@keyframes emblemLotusGlow {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.75; }
+}
+
+.emblem-lg__ring {
+  position: absolute; left: 59.5%; top: 50.5%; width: 64.5%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%; pointer-events: none; mix-blend-mode: screen;
+  background: conic-gradient(from 0deg, transparent 0 82%, rgba(240, 214, 150, 0.9) 90%, transparent 98%);
+  -webkit-mask-image: radial-gradient(closest-side, transparent 93.2%, black 94.6%, black 98%, transparent 99.4%);
+  mask-image: radial-gradient(closest-side, transparent 93.2%, black 94.6%, black 98%, transparent 99.4%);
+  animation: emblemRingGlint 12s linear infinite;
+  filter: blur(0.6px);
+}
+@keyframes emblemRingGlint { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.emblem-lg__dust { position: absolute; inset: -12%; width: 124%; height: 124%; pointer-events: none; }
 
 .about__content p { margin-bottom: 1.1rem; color: var(--ink-soft); }
 .about__content p strong { color: var(--purple-deep); }
@@ -1263,4 +1384,5 @@ h1, h2, h3 {
   .preloader { display: none; }
   .hero__canvas { display: none; }
   .marquee__track { animation: none; }
+  .emblem-lg__dust { display: none; }
 }

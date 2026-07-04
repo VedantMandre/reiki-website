@@ -548,6 +548,90 @@
   })();
 
   /* =====================================================
+     Living emblem — drifting gold dust over the About
+     section brand mark (canvas.emblem-lg__dust)
+     ===================================================== */
+  (function initEmblemDust() {
+    var canvas = document.querySelector(".emblem-lg__dust");
+    if (!canvas || reducedMotion) return;
+
+    var stage = canvas.closest(".emblem-lg__stage");
+    var ctx = canvas.getContext("2d");
+    var W, H, dpr;
+
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var r = canvas.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", size);
+
+    var N = 26;
+    var motes = [];
+
+    function spawn(anywhere) {
+      var zone = Math.random();
+      var x, y;
+      if (zone < 0.45) {
+        x = W * (0.12 + Math.random() * 0.28);
+        y = H * (0.25 + Math.random() * 0.55);
+      } else if (zone < 0.8) {
+        x = W * (0.35 + Math.random() * 0.45);
+        y = H * (0.62 + Math.random() * 0.3);
+      } else {
+        x = W * Math.random();
+        y = H * (anywhere ? Math.random() : 0.9 + Math.random() * 0.1);
+      }
+      return {
+        x: x, y: y,
+        r: 0.6 + Math.random() * 1.8,
+        vy: 0.06 + Math.random() * 0.16,
+        sway: Math.random() * Math.PI * 2,
+        swayAmp: 0.15 + Math.random() * 0.35,
+        life: 0,
+        maxLife: 400 + Math.random() * 500
+      };
+    }
+
+    var visible = true;
+    if ("IntersectionObserver" in window && stage) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+      }).observe(stage);
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (!visible || document.hidden) return;
+
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < motes.length; i++) {
+        var m = motes[i];
+        m.life++;
+        m.sway += 0.012;
+        m.x += Math.sin(m.sway) * m.swayAmp * 0.4;
+        m.y -= m.vy;
+        var fade = Math.min(m.life / 90, 1) * Math.max(1 - m.life / m.maxLife, 0);
+        if (m.life > m.maxLife || m.y < -6) { motes[i] = spawn(false); continue; }
+        var g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 3.2);
+        g.addColorStop(0, "rgba(228,195,122," + (0.75 * fade) + ")");
+        g.addColorStop(0.5, "rgba(184,134,46," + (0.28 * fade) + ")");
+        g.addColorStop(1, "rgba(184,134,46,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    size();
+    motes = Array.from({ length: N }, function () { return spawn(true); });
+    requestAnimationFrame(frame);
+  })();
+
+  /* =====================================================
      Contact form — submitted via FormSubmit's AJAX endpoint
      ===================================================== */
   var form = document.getElementById("contactForm");
