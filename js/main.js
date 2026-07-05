@@ -1,8 +1,10 @@
 /* =============================================================
    Suved Healers — Healing from Within
    Experience layer: preloader, Lenis smooth scroll, GSAP +
-   ScrollTrigger + SplitText animations, Three.js energy field,
-   custom cursor, magnetic buttons, 3D tilt cards.
+   ScrollTrigger + SplitText animations, a persistent Three.js
+   "cosmos" particle universe that morphs between formations as
+   the visitor scrolls between chapters, custom cursor, magnetic
+   buttons, 3D tilt cards.
 
    Everything degrades gracefully: content is fully visible and
    the site fully functional if the CDN libraries fail to load
@@ -165,12 +167,22 @@
     if (cursorDot && cursorRing) {
       document.body.classList.add("has-cursor");
 
+      /* keep both hidden until the pointer actually moves, so they
+         don't sit parked in the top-left corner on load */
+      gsap.set([cursorDot, cursorRing], { autoAlpha: 0 });
+      var cursorShown = false;
+
       var dotX = gsap.quickTo(cursorDot, "x", { duration: 0.08, ease: "power2.out" });
       var dotY = gsap.quickTo(cursorDot, "y", { duration: 0.08, ease: "power2.out" });
-      var ringX = gsap.quickTo(cursorRing, "x", { duration: 0.35, ease: "power3.out" });
-      var ringY = gsap.quickTo(cursorRing, "y", { duration: 0.35, ease: "power3.out" });
+      var ringX = gsap.quickTo(cursorRing, "x", { duration: 0.18, ease: "power3.out" });
+      var ringY = gsap.quickTo(cursorRing, "y", { duration: 0.18, ease: "power3.out" });
 
       window.addEventListener("mousemove", function (e) {
+        if (!cursorShown) {
+          cursorShown = true;
+          gsap.set([cursorDot, cursorRing], { x: e.clientX, y: e.clientY });
+          gsap.to([cursorDot, cursorRing], { autoAlpha: 1, duration: 0.25 });
+        }
         dotX(e.clientX); dotY(e.clientY);
         ringX(e.clientX); ringY(e.clientY);
       }, { passive: true });
@@ -368,6 +380,19 @@
         }
       });
     }
+
+    /* Hero content recedes into the cosmos as the story begins */
+    gsap.to(".hero__inner", {
+      autoAlpha: 0,
+      y: -90,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom 60%", scrub: 0.4 }
+    });
+    gsap.to(".hero__scroll", {
+      autoAlpha: 0,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "18% top", scrub: true }
+    });
   }
 
   /* =====================================================
@@ -419,81 +444,318 @@
   }
 
   /* =====================================================
-     Three.js — hero "energy field" particles
+     Three.js — the cosmos. One persistent point cloud
+     fixed behind every chapter; as the visitor scrolls,
+     its particles morph between six formations:
+
+       home         → spiral galaxy
+       about        → blooming lotus
+       services     → sacred mandala rings
+       journey      → ascending double helix
+       testimonials → constellation sphere
+       contact      → radiant sun with halo
+
+     Morphing runs on the GPU: the vertex shader blends
+     between two position/color attribute sets with a uMix
+     uniform scrubbed by scroll position. Buffers only get
+     rewritten when the scroll crosses into a new segment.
      ===================================================== */
-  (function initEnergyField() {
-    var canvas = document.getElementById("energyCanvas");
+  (function initCosmos() {
+    var canvas = document.getElementById("cosmos");
     if (!canvas || !hasThree || reducedMotion) return;
 
-    var hero = document.querySelector(".hero");
     var renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: false,
+        powerPreference: "high-performance"
+      });
     } catch (err) {
       canvas.style.display = "none";
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
-    camera.position.z = 14;
-
-    /* Soft round sprite drawn on a small canvas (keeps CSP img-src happy: data/self only used internally) */
-    var spriteCanvas = document.createElement("canvas");
-    spriteCanvas.width = spriteCanvas.height = 64;
-    var ctx = spriteCanvas.getContext("2d");
-    var grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    grad.addColorStop(0, "rgba(255,255,255,1)");
-    grad.addColorStop(0.4, "rgba(255,255,255,0.5)");
-    grad.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 64, 64);
-    var sprite = new THREE.CanvasTexture(spriteCanvas);
 
     var isMobile = window.innerWidth < 768;
-    var COUNT = isMobile ? 420 : 1100;
-    var SPREAD_X = 26, SPREAD_Y = 16, SPREAD_Z = 10;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
-    var palette = [
-      new THREE.Color("#d4a94f"), /* gold */
-      new THREE.Color("#9d6fc4"), /* violet */
-      new THREE.Color("#c9b2e4"), /* lilac */
-      new THREE.Color("#aab98c")  /* sage */
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(58, 1, 0.1, 120);
+    camera.position.z = 17;
+
+    var COUNT = isMobile ? 2800 : 7000;
+
+    /* ---------- formation generators ---------- */
+    function gauss() {
+      /* approximate normal distribution via central limit */
+      return (Math.random() + Math.random() + Math.random() + Math.random() - 2) / 2;
+    }
+
+    /* bake a rotation about X into a formation so each shape
+       faces the camera at its most readable angle */
+    function tiltX(p, b) {
+      var s = Math.sin(b), c = Math.cos(b);
+      for (var i = 0; i < COUNT; i++) {
+        var y = p[i * 3 + 1], z = p[i * 3 + 2];
+        p[i * 3 + 1] = y * c - z * s;
+        p[i * 3 + 2] = y * s + z * c;
+      }
+      return p;
+    }
+
+    function makeGalaxy() {
+      var p = new Float32Array(COUNT * 3);
+      var ARMS = 3, R = 11.5;
+      for (var i = 0; i < COUNT; i++) {
+        var arm = i % ARMS;
+        var r = R * Math.pow(Math.random(), 0.65);
+        var a = arm * (Math.PI * 2 / ARMS) + r * 0.42 + gauss() * (0.34 - (r / R) * 0.18);
+        p[i * 3] = Math.cos(a) * r;
+        p[i * 3 + 1] = Math.sin(a) * r;
+        p[i * 3 + 2] = gauss() * (1.6 - (r / R) * 1.1);
+      }
+      return tiltX(p, -1.05);
+    }
+
+    function makeLotus() {
+      var p = new Float32Array(COUNT * 3);
+      var PETALS = 8;
+      for (var i = 0; i < COUNT; i++) {
+        if (Math.random() < 0.14) {
+          /* golden heart at the center */
+          var rr = 1.5 * Math.cbrt(Math.random());
+          var th = Math.random() * Math.PI * 2;
+          var ph = Math.acos(2 * Math.random() - 1);
+          p[i * 3] = rr * Math.sin(ph) * Math.cos(th);
+          p[i * 3 + 1] = rr * Math.cos(ph) * 0.7 + 0.4;
+          p[i * 3 + 2] = rr * Math.sin(ph) * Math.sin(th);
+          continue;
+        }
+        var layer = Math.random() < 0.58 ? 0 : 1;
+        var petal = Math.floor(Math.random() * PETALS);
+        var len = layer === 0 ? 7.6 : 5.4;
+        var u = Math.random();
+        var base = petal * (Math.PI * 2 / PETALS) + (layer ? Math.PI / PETALS : 0);
+        var width = Math.sin(Math.min(u * 1.2, 1) * Math.PI) * 0.36;
+        var ang = base + (Math.random() - 0.5) * width * 2;
+        var r = 0.6 + u * len;
+        p[i * 3] = Math.cos(ang) * r;
+        p[i * 3 + 1] = -2.4 + u * u * (layer ? 2.8 : 4.8) + (Math.random() - 0.5) * 0.25;
+        p[i * 3 + 2] = Math.sin(ang) * r;
+      }
+      return tiltX(p, 0.42);
+    }
+
+    function makeMandala() {
+      var p = new Float32Array(COUNT * 3);
+      for (var i = 0; i < COUNT; i++) {
+        var ring = Math.floor(Math.random() * 5);
+        var R = 2.2 + ring * 1.85;
+        var k = 6 + ring * 3;
+        var a = Math.random() * Math.PI * 2;
+        var r = R + Math.sin(a * k) * (0.32 + ring * 0.1) + gauss() * 0.12;
+        p[i * 3] = Math.cos(a) * r;
+        p[i * 3 + 1] = Math.sin(a) * r;
+        p[i * 3 + 2] = Math.cos(a * k) * 0.5 + gauss() * 0.2;
+      }
+      return p;
+    }
+
+    function makeHelix() {
+      var p = new Float32Array(COUNT * 3);
+      var H = 17;
+      for (var i = 0; i < COUNT; i++) {
+        if (Math.random() < 0.18) {
+          /* rising sparkles in the core */
+          p[i * 3] = gauss() * 0.7;
+          p[i * 3 + 1] = (Math.random() - 0.5) * H;
+          p[i * 3 + 2] = gauss() * 0.7;
+          continue;
+        }
+        var strand = Math.random() < 0.5 ? 0 : Math.PI;
+        var y = (Math.random() - 0.5) * H;
+        var a = y * 0.75 + strand;
+        var r = 3.4 + Math.sin(y * 0.35) * 0.5 + gauss() * 0.28;
+        p[i * 3] = Math.cos(a) * r;
+        p[i * 3 + 1] = y;
+        p[i * 3 + 2] = Math.sin(a) * r;
+      }
+      return p;
+    }
+
+    function makeConstellation() {
+      var p = new Float32Array(COUNT * 3);
+      var CLUSTERS = 7, dirs = [];
+      for (var c = 0; c < CLUSTERS; c++) {
+        var th = Math.random() * Math.PI * 2;
+        var ph = Math.acos(2 * Math.random() - 1);
+        dirs.push([Math.sin(ph) * Math.cos(th), Math.cos(ph), Math.sin(ph) * Math.sin(th)]);
+      }
+      var R = 12.5;
+      for (var i = 0; i < COUNT; i++) {
+        var th2 = Math.random() * Math.PI * 2;
+        var ph2 = Math.acos(2 * Math.random() - 1);
+        var v = [Math.sin(ph2) * Math.cos(th2), Math.cos(ph2), Math.sin(ph2) * Math.sin(th2)];
+        if (Math.random() < 0.4) {
+          /* pull a share of the stars into constellation knots */
+          var d = dirs[i % CLUSTERS];
+          v = [d[0] + gauss() * 0.16, d[1] + gauss() * 0.16, d[2] + gauss() * 0.16];
+          var n = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+          v = [v[0] / n, v[1] / n, v[2] / n];
+        }
+        var rr = R * (0.9 + Math.random() * 0.2);
+        p[i * 3] = v[0] * rr;
+        p[i * 3 + 1] = v[1] * rr;
+        p[i * 3 + 2] = v[2] * rr;
+      }
+      return p;
+    }
+
+    function makeOrb() {
+      var p = new Float32Array(COUNT * 3);
+      for (var i = 0; i < COUNT; i++) {
+        if (Math.random() < 0.3) {
+          /* tilted halo ring */
+          var a = Math.random() * Math.PI * 2;
+          var r = 6.8 + gauss() * 0.4;
+          var x = Math.cos(a) * r;
+          var y = Math.sin(a) * r * 0.32;
+          var z = gauss() * 0.3;
+          p[i * 3] = x;
+          p[i * 3 + 1] = y * 0.9 + z;
+          p[i * 3 + 2] = -y * 0.4 + z;
+          continue;
+        }
+        var rr = 4.3 * Math.pow(Math.random(), 0.55);
+        var th = Math.random() * Math.PI * 2;
+        var ph = Math.acos(2 * Math.random() - 1);
+        p[i * 3] = rr * Math.sin(ph) * Math.cos(th);
+        p[i * 3 + 1] = rr * Math.cos(ph);
+        p[i * 3 + 2] = rr * Math.sin(ph) * Math.sin(th);
+      }
+      return p;
+    }
+
+    function makeColors(hexes) {
+      var cols = hexes.map(function (h) { return new THREE.Color(h); });
+      var arr = new Float32Array(COUNT * 3);
+      for (var i = 0; i < COUNT; i++) {
+        var c = cols[Math.floor(Math.random() * cols.length)];
+        arr[i * 3] = c.r;
+        arr[i * 3 + 1] = c.g;
+        arr[i * 3 + 2] = c.b;
+      }
+      return arr;
+    }
+
+    /* one formation per chapter, in page order */
+    var formations = [
+      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#9d6fc4", "#c9b2e4", "#fdf6e3"]) },
+      { pos: makeLotus(),         col: makeColors(["#e8a7c8", "#c9b2e4", "#e9c87e", "#f7d9ea"]) },
+      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#c9b2e4", "#aab98c"]) },
+      { pos: makeHelix(),         col: makeColors(["#9d6fc4", "#c9b2e4", "#e9c87e", "#ede4fb"]) },
+      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#c9b2e4", "#ffffff"]) },
+      { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) }
     ];
 
-    var positions = new Float32Array(COUNT * 3);
-    var colors = new Float32Array(COUNT * 3);
-    var drift = new Float32Array(COUNT * 2); /* per-particle speed + phase */
-
+    /* ---------- geometry: two blendable position/color sets ---------- */
+    var posA = new Float32Array(formations[0].pos);
+    var posB = new Float32Array(formations[1].pos);
+    var colA = new Float32Array(formations[0].col);
+    var colB = new Float32Array(formations[1].col);
+    var sizes = new Float32Array(COUNT);
+    var phases = new Float32Array(COUNT);
     for (var i = 0; i < COUNT; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * SPREAD_X;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * SPREAD_Y;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * SPREAD_Z;
-      var c = palette[Math.floor(Math.random() * palette.length)];
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
-      drift[i * 2] = 0.12 + Math.random() * 0.5;       /* rise speed */
-      drift[i * 2 + 1] = Math.random() * Math.PI * 2;  /* sway phase */
+      sizes[i] = 0.6 + Math.pow(Math.random(), 2.2) * 1.6; /* many faint, few bright */
+      phases[i] = Math.random() * Math.PI * 2;
     }
 
     var geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute("position", new THREE.BufferAttribute(posA, 3));
+    geometry.setAttribute("aTarget", new THREE.BufferAttribute(posB, 3));
+    geometry.setAttribute("aColorA", new THREE.BufferAttribute(colA, 3));
+    geometry.setAttribute("aColorB", new THREE.BufferAttribute(colB, 3));
+    geometry.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute("aPhase", new THREE.BufferAttribute(phases, 1));
 
-    var material = new THREE.PointsMaterial({
-      size: isMobile ? 0.22 : 0.18,
-      map: sprite,
-      vertexColors: true,
+    var uniforms = {
+      uMix: { value: 0 },
+      uTime: { value: 0 },
+      uSize: { value: (isMobile ? 34 : 30) * renderer.getPixelRatio() }
+    };
+
+    var material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
       transparent: true,
-      opacity: 0.85,
       depthWrite: false,
-      blending: THREE.AdditiveBlending
+      blending: THREE.AdditiveBlending,
+      vertexShader: [
+        "attribute vec3 aTarget;",
+        "attribute vec3 aColorA;",
+        "attribute vec3 aColorB;",
+        "attribute float aSize;",
+        "attribute float aPhase;",
+        "uniform float uMix;",
+        "uniform float uTime;",
+        "uniform float uSize;",
+        "varying vec3 vColor;",
+        "varying float vTwinkle;",
+        "void main() {",
+        "  vec3 p = mix(position, aTarget, uMix);",
+        "  p.x += sin(uTime * 0.5 + aPhase) * 0.14;",
+        "  p.y += cos(uTime * 0.4 + aPhase * 1.7) * 0.14;",
+        "  p.z += sin(uTime * 0.3 + aPhase * 2.3) * 0.1;",
+        "  vColor = mix(aColorA, aColorB, uMix);",
+        "  vTwinkle = 0.72 + 0.28 * sin(uTime * 1.6 + aPhase * 3.1);",
+        "  vec4 mv = modelViewMatrix * vec4(p, 1.0);",
+        "  gl_PointSize = aSize * uSize / max(-mv.z, 2.0);",
+        "  gl_Position = projectionMatrix * mv;",
+        "}"
+      ].join("\n"),
+      fragmentShader: [
+        "varying vec3 vColor;",
+        "varying float vTwinkle;",
+        "void main() {",
+        "  float d = length(gl_PointCoord - vec2(0.5));",
+        "  float a = smoothstep(0.5, 0.04, d);",
+        "  gl_FragColor = vec4(vColor, a * 0.85 * vTwinkle);",
+        "}"
+      ].join("\n")
     });
 
     var points = new THREE.Points(geometry, material);
     scene.add(points);
+
+    /* ---------- scroll → segment + blend factor ---------- */
+    var chapters = ["home", "about", "services", "journey", "testimonials", "contact"]
+      .map(function (id) { return document.getElementById(id); })
+      .filter(Boolean);
+
+    var anchors = [];
+    function computeAnchors() {
+      var vh = window.innerHeight;
+      anchors = chapters.map(function (el) {
+        return Math.max(el.getBoundingClientRect().top + window.scrollY - vh * 0.55, 0);
+      });
+    }
+
+    var currentSeg = -1;
+    function setSegment(seg) {
+      currentSeg = seg;
+      var next = Math.min(seg + 1, formations.length - 1);
+      posA.set(formations[seg].pos);
+      posB.set(formations[next].pos);
+      colA.set(formations[seg].col);
+      colB.set(formations[next].col);
+      geometry.attributes.position.needsUpdate = true;
+      geometry.attributes.aTarget.needsUpdate = true;
+      geometry.attributes.aColorA.needsUpdate = true;
+      geometry.attributes.aColorB.needsUpdate = true;
+    }
+    setSegment(0);
+
+    function smoothstep(t) { return t * t * (3 - 2 * t); }
 
     var mouseX = 0, mouseY = 0;
     if (finePointer) {
@@ -504,42 +766,44 @@
     }
 
     function resize() {
-      var w = hero.clientWidth;
-      var h = hero.clientHeight;
+      var w = window.innerWidth;
+      var h = window.innerHeight;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      computeAnchors();
     }
     window.addEventListener("resize", resize);
     resize();
 
-    var visible = true;
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
-      }).observe(hero);
-    }
-
     var clock = new THREE.Clock();
+    var frame = 0;
     function tick() {
       requestAnimationFrame(tick);
-      if (!visible || document.hidden) return;
+      if (document.hidden) return;
 
-      var t = clock.getElapsedTime();
-      var pos = geometry.attributes.position.array;
+      /* layout shifts (fonts, images) move the anchors; re-measure
+         occasionally instead of observing everything */
+      if (++frame % 120 === 0) computeAnchors();
 
-      for (var i = 0; i < COUNT; i++) {
-        var speed = drift[i * 2];
-        var phase = drift[i * 2 + 1];
-        pos[i * 3 + 1] += speed * 0.008;                      /* gentle rise */
-        pos[i * 3] += Math.sin(t * 0.4 + phase) * 0.0016;     /* soft sway */
-        if (pos[i * 3 + 1] > SPREAD_Y / 2) pos[i * 3 + 1] = -SPREAD_Y / 2;
+      var s = window.scrollY;
+      var seg = 0;
+      for (var i = anchors.length - 1; i >= 0; i--) {
+        if (s >= anchors[i]) { seg = i; break; }
       }
-      geometry.attributes.position.needsUpdate = true;
+      seg = Math.min(seg, anchors.length - 2);
+      var span = anchors[seg + 1] - anchors[seg];
+      var t = span > 0 ? (s - anchors[seg]) / span : 0;
+      t = Math.max(0, Math.min(1, t));
+      if (seg !== currentSeg) setSegment(seg);
+      uniforms.uMix.value = smoothstep(t);
 
-      points.rotation.y = t * 0.02;
-      camera.position.x += (mouseX * 1.4 - camera.position.x) * 0.03;
-      camera.position.y += (-mouseY * 0.9 - camera.position.y) * 0.03;
+      var elapsed = clock.getElapsedTime();
+      uniforms.uTime.value = elapsed;
+      points.rotation.y = elapsed * 0.03 + s * 0.00012;
+
+      camera.position.x += (mouseX * 1.6 - camera.position.x) * 0.03;
+      camera.position.y += (-mouseY * 1.0 - camera.position.y) * 0.03;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
@@ -666,7 +930,7 @@
         return response.json();
       })
       .then(function () {
-        note.textContent = "Thank you, " + name + " — your message has been sent. Sujata will be in touch soon. ✦";
+        note.textContent = "Thank you, " + name + " — your message has been sent. We'll be in touch soon. ✦";
         gtag("event", "form_submit_success", { event_category: "contact", event_label: "contact_form" });
         form.reset();
       })
@@ -678,11 +942,30 @@
       });
   });
 
-  /* WhatsApp button click tracking */
-  var whatsappFab = document.querySelector(".whatsapp-fab");
-  if (whatsappFab) {
-    whatsappFab.addEventListener("click", function () {
-      gtag("event", "whatsapp_click", { event_category: "engagement", event_label: "floating_button" });
+  /* WhatsApp chooser: the FAB reveals one chat link per healer */
+  var waGroup = document.getElementById("waGroup");
+  var waToggle = document.getElementById("waToggle");
+  if (waGroup && waToggle) {
+    waToggle.addEventListener("click", function () {
+      var open = waGroup.classList.toggle("is-open");
+      waToggle.setAttribute("aria-expanded", String(open));
+    });
+    /* close when clicking anywhere else on the page */
+    document.addEventListener("click", function (e) {
+      if (!waGroup.contains(e.target)) {
+        waGroup.classList.remove("is-open");
+        waToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+    waGroup.querySelectorAll(".whatsapp-fab-option").forEach(function (link) {
+      link.addEventListener("click", function () {
+        gtag("event", "whatsapp_click", {
+          event_category: "engagement",
+          event_label: link.getAttribute("data-healer") || "floating_button"
+        });
+        waGroup.classList.remove("is-open");
+        waToggle.setAttribute("aria-expanded", "false");
+      });
     });
   }
 
