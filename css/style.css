@@ -622,7 +622,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   position: relative;
   filter: drop-shadow(0 0 24px rgba(157, 111, 196, 0.3));
 }
-.mandala__svg { width: 100%; height: auto; animation: mandala-spin 90s linear infinite; }
+.mandala__svg { width: 100%; height: auto; }
+.mandala__rotor { transform-origin: 200px 200px; animation: mandala-spin 90s linear infinite; }
 .mandala__petals { transform-origin: 200px 200px; animation: mandala-spin 60s linear infinite reverse; }
 .mandala__om {
   font-size: 44px;
