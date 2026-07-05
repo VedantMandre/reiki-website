@@ -1,5 +1,5 @@
 /* =============================================================
-   Suved Healing — Healing from Within
+   Suved Healers — Healing from Within
    Immersive dark-cosmos redesign: a persistent Three.js particle
    universe (js/main.js) morphs between formations behind six
    full-height chapters. Brand hues — antique gold, violet, lilac,
@@ -384,8 +384,17 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   position: relative;
   display: inline-flex;
   width: 44px;
-  height: auto;
+  height: 47px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(233, 200, 126, 0.4);
   filter: drop-shadow(0 0 10px rgba(233, 200, 126, 0.35));
+  flex: none;
+}
+.nav__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .nav__brand-text {
@@ -795,8 +804,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   aspect-ratio: 618 / 658;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(212, 169, 79, 0.45);
-  box-shadow: 0 0 0 6px rgba(250, 246, 238, 0.6);
+  border: 1px solid rgba(233, 200, 126, 0.4);
+  box-shadow: var(--shadow-glow-gold), 0 20px 50px -20px rgba(0, 0, 0, 0.6);
   animation: badgeBreathe 8s ease-in-out infinite;
 }
 @keyframes badgeBreathe {
