@@ -969,6 +969,25 @@
     });
   }
 
+  /* Dynamic heights for 3D flip cards so they expand cleanly */
+  function updateFlipHeights() {
+    document.querySelectorAll(".card--flip").forEach(function (card) {
+      var back = card.querySelector(".card__flip-back");
+      if (back) {
+        // back face is absolute, so its scrollHeight is exactly the content size
+        var style = getComputedStyle(card);
+        var pt = parseFloat(style.paddingTop) || 0;
+        var pb = parseFloat(style.paddingBottom) || 0;
+        card.style.setProperty("--back-h", (back.scrollHeight + pt + pb) + "px");
+      }
+    });
+  }
+  // Run once everything (fonts, images) is settled, and re-run on resize
+  window.addEventListener("load", updateFlipHeights);
+  window.addEventListener("resize", updateFlipHeights);
+  // Also run immediately just in case
+  updateFlipHeights();
+
   /* Footer year */
   document.getElementById("year").textContent = new Date().getFullYear();
 })();
