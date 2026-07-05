@@ -1,4 +1,4 @@
-# Owner Runbook — Suved Healing Website
+# Owner Runbook — Suved Healers Website
 
 This is a separate, post-implementation operations runbook. It is **not**
 part of the implementation plan (see `Implementation.md`, where every item
@@ -29,23 +29,23 @@ and pushed to `main`.
    for the JSON-LD, and a Lighthouse audit (Performance/SEO/Accessibility/
    Best Practices) — the implementation already targets >95 on all four.
 
-## Suved Healing rebrand follow-ups (June 2026)
+## Suved Healers rebrand follow-ups (July 2026)
 
-The site was redesigned and renamed to **Suved Healing** (logo at
-`assets/suved-logo.png`, used for OG/Twitter previews and JSON-LD;
-`favicon.svg` was redrawn as a lotus mark in the new palette). The nav,
-about section, and footer instead use `assets/suved-emblem.png` — the
-same artwork with its background keyed to transparent — as a "living
-emblem": it breathes, glows, and (in the about section) drifts gold dust
-via CSS animations and `initEmblemDust()` in `js/main.js`. Two asset sets
-still carry the old branding and need image tooling to regenerate:
+The site was renamed from "Suved Healing" to **Suved Healers** and now uses
+the occult-styled zodiac/OM badge at `assets/suved-badge.png` (a framed gold
+emblem on a dark navy ground) in the nav, about section, and footer, in
+place of the old meditating-figure-on-lotus artwork. The badge image itself
+is untouched; it's mounted in a gold-ringed frame with an ambient halo glow,
+a slow light-sweep sheen, and (in the about section) drifting gold dust —
+all via CSS animations plus `initBadgeDust()` in `js/main.js`. Two asset
+sets still carry the old branding and need image tooling to regenerate:
 
 8. **PNG favicons** (`favicon.ico`, `favicon-16/32x32.png`,
    `apple-touch-icon.png`, `android-chrome-192/512.png`): regenerate from
-   `favicon.svg` or the logo at https://realfavicongenerator.net and
+   `favicon.svg` or the new badge at https://realfavicongenerator.net and
    replace the files in the repo root.
 9. **Social share image** (`assets/og-image.png`): create a 1200×630 image
-   from the Suved Healing logo/palette. The page currently points OG/Twitter
-   tags at `assets/suved-logo.png` (square), which works but a proper
+   from the new badge/palette. The page currently points OG/Twitter tags at
+   `assets/suved-badge.png` directly (near-square), which works but a proper
    1200×630 banner renders better; update the `og:image`/`twitter:image`
    tags in `index.html` when ready.
