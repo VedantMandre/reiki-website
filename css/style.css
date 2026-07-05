@@ -1094,6 +1094,81 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .card__link:hover { color: var(--gold-bright); letter-spacing: 0.08em; }
 
+/* ---------- Flip Card Mechanics ---------- */
+.card--flip {
+  perspective: 1000px;
+}
+.card__flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  display: flex;
+  flex: 1; /* allow it to grow if card stretches */
+}
+.card--flip:hover .card__flip-inner {
+  transform: rotateY(180deg);
+}
+.card__flip-front,
+.card__flip-back {
+  width: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.card__flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+}
+.card__flip-back::-webkit-scrollbar { width: 4px; }
+.card__flip-back::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
+.card__flip-back::-webkit-scrollbar-thumb { background: var(--gold-bright); border-radius: 4px; }
+
+/* Flip Back Styling */
+.card__back-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding-bottom: 0.5rem;
+}
+.card__back-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--gold-bright);
+  margin-top: 0.4rem;
+  line-height: 1.1;
+}
+.card__back-title:first-child { margin-top: 0; }
+.card__back-subtitle {
+  font-size: 0.8rem;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.card__list--sm {
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+.card__list--sm li {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding-left: 1.1rem;
+}
+.card__list--sm li::before {
+  top: 0.25em;
+  font-size: 0.65rem;
+}
+.card__list--sm strong {
+  color: var(--ink);
+}
+
 /* ---------- Journey — Chapter IV: the ascent ---------- */
 .journey { overflow: hidden; }
 
