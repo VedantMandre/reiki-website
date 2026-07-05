@@ -1489,7 +1489,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   .hero__inner { grid-template-columns: 1fr; text-align: center; }
   .hero__lead { margin-inline: auto; }
   .hero__actions, .hero__stats { justify-content: center; }
-  .hero__visual { display: none; }
+  .hero__visual { margin-top: 2rem; }
   .journey__steps { grid-template-columns: repeat(2, 1fr); gap: 2.4rem 1.8rem; }
   .journey__line { display: none; }
 }
