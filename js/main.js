@@ -1,5 +1,5 @@
 /* =============================================================
-   Suved Healing — Healing from Within
+   Suved Healers — Healing from Within
    Experience layer: preloader, Lenis smooth scroll, GSAP +
    ScrollTrigger + SplitText animations, a persistent Three.js
    "cosmos" particle universe that morphs between formations as
@@ -812,14 +812,14 @@
   })();
 
   /* =====================================================
-     Living emblem — drifting gold dust over the About
-     section brand mark (canvas.emblem-lg__dust)
+     Living badge — drifting gold dust orbiting the About
+     section brand mark (canvas.badge-lg__dust)
      ===================================================== */
-  (function initEmblemDust() {
-    var canvas = document.querySelector(".emblem-lg__dust");
+  (function initBadgeDust() {
+    var canvas = document.querySelector(".badge-lg__dust");
     if (!canvas || reducedMotion) return;
 
-    var stage = canvas.closest(".emblem-lg__stage");
+    var stage = canvas.closest(".badge-lg");
     var ctx = canvas.getContext("2d");
     var W, H, dpr;
 
@@ -832,26 +832,30 @@
     }
     window.addEventListener("resize", size);
 
-    var N = 26;
+    var N = 30;
     var motes = [];
+    /* canvas.badge-lg__dust is inset -18% around the badge, so the
+       badge itself occupies roughly the middle 74% of this canvas;
+       bias motes to hug that margin band, orbiting the frame. */
+    var margin = 0.14;
 
     function spawn(anywhere) {
       var zone = Math.random();
       var x, y;
-      if (zone < 0.45) {
-        x = W * (0.12 + Math.random() * 0.28);
-        y = H * (0.25 + Math.random() * 0.55);
-      } else if (zone < 0.8) {
-        x = W * (0.35 + Math.random() * 0.45);
-        y = H * (0.62 + Math.random() * 0.3);
+      if (zone < 0.65) {
+        var edge = Math.random();
+        if (edge < 0.25) { x = W * Math.random(); y = H * (Math.random() * margin); }
+        else if (edge < 0.5) { x = W * Math.random(); y = H * (1 - Math.random() * margin); }
+        else if (edge < 0.75) { x = W * (Math.random() * margin); y = H * Math.random(); }
+        else { x = W * (1 - Math.random() * margin); y = H * Math.random(); }
       } else {
         x = W * Math.random();
-        y = H * (anywhere ? Math.random() : 0.9 + Math.random() * 0.1);
+        y = H * (anywhere ? Math.random() : 1 + Math.random() * 0.08);
       }
       return {
         x: x, y: y,
         r: 0.6 + Math.random() * 1.8,
-        vy: 0.06 + Math.random() * 0.16,
+        vy: 0.05 + Math.random() * 0.14,
         sway: Math.random() * Math.PI * 2,
         swayAmp: 0.15 + Math.random() * 0.35,
         life: 0,

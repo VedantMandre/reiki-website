@@ -1,8 +1,8 @@
-# Suved Healing — Official Website
+# Suved Healers — Official Website
 
 **Healing from Within · Balance · Energy · Peace**
 
-An immersive, fully responsive single-page website for **Suved Healing** by
+An immersive, fully responsive single-page website for **Suved Healers** by
 Sujata Mandre — certified Reiki Grandmaster, Numerologist, and Spiritual
 Consultant.
 
@@ -19,7 +19,7 @@ loaded from CDN:
 ```
 reiki-website/
 ├── index.html        # Single-page site (hero, about, services, journey, testimonials, contact)
-├── css/style.css     # Suved Healing design system, layout, responsive breakpoints
+├── css/style.css     # Suved Healers design system, layout, responsive breakpoints
 ├── js/main.js        # All interactivity & animation (degrades gracefully without CDNs/JS)
 └── assets/           # Brand logo, OG image
 ```
@@ -45,7 +45,7 @@ host works — no server-side code is required.
 ## Customizing
 
 - **Colors & fonts** — all design tokens live in the `:root` block at the top
-  of `css/style.css` (palette drawn from the Suved Healing brand mark).
+  of `css/style.css` (palette drawn from the Suved Healers brand mark).
 - **GA4** — replace the `G-XXXXXXXXXX` placeholder in `index.html` (loader tag)
   and `js/main.js` (config call) with the real Measurement ID.
 - **Form backend** — the contact form posts to FormSubmit
