@@ -650,12 +650,14 @@
     }
 
     /* one formation per chapter, in page order */
+    /* palette matches the badge-navy theme: antique gold, moonlit
+       steel blue, and ivory (see css/style.css tokens) */
     var formations = [
-      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#9d6fc4", "#c9b2e4", "#fdf6e3"]) },
-      { pos: makeLotus(),         col: makeColors(["#e8a7c8", "#c9b2e4", "#e9c87e", "#f7d9ea"]) },
-      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#c9b2e4", "#aab98c"]) },
-      { pos: makeHelix(),         col: makeColors(["#9d6fc4", "#c9b2e4", "#e9c87e", "#ede4fb"]) },
-      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#c9b2e4", "#ffffff"]) },
+      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#7f96c2", "#b7c4dd", "#fdf6e3"]) },
+      { pos: makeLotus(),         col: makeColors(["#f2dfae", "#b7c4dd", "#e9c87e", "#fdf3d9"]) },
+      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#b7c4dd", "#aab98c"]) },
+      { pos: makeHelix(),         col: makeColors(["#7f96c2", "#b7c4dd", "#e9c87e", "#e8edf6"]) },
+      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#b7c4dd", "#ffffff"]) },
       { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) }
     ];
 
