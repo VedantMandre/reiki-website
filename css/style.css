@@ -2,8 +2,10 @@
    Suved Healers — Healing from Within
    Immersive dark-cosmos redesign: a persistent Three.js particle
    universe (js/main.js) morphs between formations behind six
-   full-height chapters. Brand hues — antique gold, violet, lilac,
-   sage — glow against deep midnight violet.
+   full-height chapters. Brand hues — antique gold, moonlit steel
+   blue, ivory, sage — glow against the deep navy ground of the
+   Suved Healers badge (#12161F), so the whole site blends with
+   the logo artwork.
 
    All content is visible without JS; motion is disabled under
    prefers-reduced-motion, and the WebGL layer degrades to the
@@ -12,15 +14,17 @@
 
 /* ---------- Tokens ---------- */
 :root {
-  --void: #0b0714;
-  --night: #120a20;
-  --night-soft: #1a1030;
-  --ink: #ede4fb;
-  --ink-soft: #b9a8d6;
-  --ink-faint: #8d7ab0;
-  --purple: #9d6fc4;
-  --purple-deep: #46306e;
-  --lilac: #c9b2e4;
+  /* Ground colors are drawn from the badge artwork: #12161F is the
+     logo's own dark navy, so the emblem melts into the page. */
+  --void: #12161f;
+  --night: #171e2b;
+  --night-soft: #1e2836;
+  --ink: #ede8dc;
+  --ink-soft: #afb9c9;
+  --ink-faint: #7e8899;
+  --purple: #7f96c2;
+  --purple-deep: #2a3852;
+  --lilac: #b7c4dd;
   --gold: #d4a94f;
   --gold-bright: #e9c87e;
   --gold-pale: #f2dfae;
@@ -28,11 +32,11 @@
   --white: #fffdf8;
 
   --grad-gold: linear-gradient(120deg, #b8862e, #e9c87e 55%, #b8862e);
-  --grad-spirit: linear-gradient(115deg, #e9c87e 0%, #c9b2e4 55%, #9d6fc4 100%);
+  --grad-spirit: linear-gradient(115deg, #e9c87e 0%, #b7c4dd 55%, #7f96c2 100%);
 
-  --glass: rgba(237, 228, 251, 0.045);
-  --glass-strong: rgba(237, 228, 251, 0.08);
-  --glass-border: rgba(201, 178, 228, 0.16);
+  --glass: rgba(237, 232, 220, 0.045);
+  --glass-strong: rgba(237, 232, 220, 0.08);
+  --glass-border: rgba(183, 196, 221, 0.16);
   --glass-border-gold: rgba(233, 200, 126, 0.28);
 
   --font-display: "Cormorant Garamond", "Times New Roman", serif;
@@ -69,8 +73,8 @@ body {
   line-height: 1.75;
   color: var(--ink-soft);
   background:
-    radial-gradient(1400px 900px at 78% -12%, rgba(84, 48, 138, 0.4), transparent 60%),
-    radial-gradient(1100px 800px at -12% 24%, rgba(46, 26, 82, 0.5), transparent 58%),
+    radial-gradient(1400px 900px at 78% -12%, rgba(40, 56, 86, 0.4), transparent 60%),
+    radial-gradient(1100px 800px at -12% 24%, rgba(28, 38, 60, 0.5), transparent 58%),
     radial-gradient(900px 700px at 96% 70%, rgba(122, 74, 42, 0.14), transparent 60%),
     var(--void);
   background-attachment: fixed;
@@ -79,6 +83,9 @@ body {
 
 img { max-width: 100%; display: block; }
 a { color: var(--lilac); text-decoration: none; }
+/* the hidden attribute must win even over display:grid/flex rules
+   (used by the review form and the admin moderation page) */
+[hidden] { display: none !important; }
 ul, ol { list-style: none; }
 strong { font-weight: 500; color: var(--ink); }
 
@@ -87,7 +94,7 @@ strong { font-weight: 500; color: var(--ink); }
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--void); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(rgba(212, 169, 79, 0.55), rgba(157, 111, 196, 0.55));
+  background: linear-gradient(rgba(212, 169, 79, 0.55), rgba(127, 150, 194, 0.55));
   border-radius: 8px;
   border: 2px solid var(--void);
 }
@@ -134,7 +141,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(1000px 600px at 50% 40%, rgba(26, 16, 48, 0.5), transparent 72%);
+    radial-gradient(1000px 600px at 50% 40%, rgba(30, 39, 53, 0.5), transparent 72%);
   /* fade the veil out before it reaches the section edges so it
      never clips into a visible seam against the cosmos */
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
@@ -170,7 +177,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: clamp(2.3rem, 5vw, 3.7rem);
   margin-bottom: 1.5rem;
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 30px rgba(11, 7, 20, 0.8);
+  text-shadow: 0 2px 30px rgba(18, 22, 31, 0.8);
 }
 
 .section-sub { color: var(--ink-soft); max-width: 46ch; margin-inline: auto; }
@@ -220,9 +227,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 
 .btn--ghost {
-  border-color: rgba(201, 178, 228, 0.4);
+  border-color: rgba(183, 196, 221, 0.4);
   color: var(--ink);
-  background: rgba(237, 228, 251, 0.04);
+  background: rgba(237, 232, 220, 0.04);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -243,7 +250,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   display: grid;
   place-items: center;
   background:
-    radial-gradient(900px 600px at 50% 32%, rgba(84, 48, 138, 0.35), transparent 62%),
+    radial-gradient(900px 600px at 50% 32%, rgba(40, 56, 86, 0.35), transparent 62%),
     var(--void);
   /* CSS-only fallback: if JS never runs, fade the veil away after 4s */
   animation: preloader-fallback 0.8s ease 4s forwards;
@@ -360,10 +367,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   border-bottom: 1px solid transparent;
 }
 .nav.is-scrolled {
-  background: rgba(11, 7, 20, 0.72);
+  background: rgba(18, 22, 31, 0.72);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom-color: rgba(201, 178, 228, 0.12);
+  border-bottom-color: rgba(183, 196, 221, 0.12);
   box-shadow: 0 12px 40px -18px rgba(0, 0, 0, 0.7);
 }
 
@@ -456,8 +463,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   gap: 6px;
   width: 46px;
   height: 46px;
-  background: rgba(237, 228, 251, 0.06);
-  border: 1px solid rgba(201, 178, 228, 0.25);
+  background: rgba(237, 232, 220, 0.06);
+  border: 1px solid rgba(183, 196, 221, 0.25);
   border-radius: 50%;
   cursor: pointer;
   align-items: center;
@@ -497,7 +504,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 480px;
   top: -10%;
   right: -8%;
-  background: radial-gradient(circle, rgba(157, 111, 196, 0.28), transparent 65%);
+  background: radial-gradient(circle, rgba(127, 150, 194, 0.28), transparent 65%);
   animation: orb-drift 14s ease-in-out infinite alternate;
 }
 .hero__orb--2 {
@@ -513,7 +520,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 300px;
   top: 40%;
   left: 44%;
-  background: radial-gradient(circle, rgba(46, 26, 82, 0.5), transparent 65%);
+  background: radial-gradient(circle, rgba(28, 38, 60, 0.5), transparent 65%);
   animation: orb-drift 22s ease-in-out infinite alternate;
 }
 
@@ -540,7 +547,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   line-height: 0.98;
   margin-bottom: 1.1rem;
   color: var(--white);
-  text-shadow: 0 4px 60px rgba(11, 7, 20, 0.9);
+  text-shadow: 0 4px 60px rgba(18, 22, 31, 0.9);
 }
 .hero__title-line { display: block; }
 
@@ -606,7 +613,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: 74%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 169, 79, 0.16), rgba(157, 111, 196, 0.1) 55%, transparent 72%);
+  background: radial-gradient(circle, rgba(212, 169, 79, 0.16), rgba(127, 150, 194, 0.1) 55%, transparent 72%);
   filter: blur(10px);
   animation: halo-pulse 6s ease-in-out infinite;
 }
@@ -618,9 +625,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 .mandala {
   width: min(420px, 78%);
-  color: rgba(201, 178, 228, 0.8);
+  color: rgba(183, 196, 221, 0.8);
   position: relative;
-  filter: drop-shadow(0 0 24px rgba(157, 111, 196, 0.3));
+  filter: drop-shadow(0 0 24px rgba(127, 150, 194, 0.3));
 }
 .mandala__svg { width: 100%; height: auto; animation: mandala-spin 90s linear infinite; }
 .mandala__petals { transform-origin: 200px 200px; animation: mandala-spin 60s linear infinite reverse; }
@@ -686,7 +693,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   left: 8%;
   right: 8%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 178, 228, 0.28), transparent);
+  background: linear-gradient(90deg, transparent, rgba(183, 196, 221, 0.28), transparent);
   pointer-events: none;
 }
 .marquee::before { top: 0; }
@@ -738,11 +745,17 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .portrait-frame__art {
   width: min(340px, 90%);
-  filter: drop-shadow(0 0 44px rgba(157, 111, 196, 0.38)) drop-shadow(0 14px 30px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 0 44px rgba(233, 200, 126, 0.4)) drop-shadow(0 14px 30px rgba(0, 0, 0, 0.45));
   transform: translateZ(40px);
 }
-.portrait-frame__badge {
+.portrait-frame__badges {
   transform: translateZ(24px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.portrait-frame__badge {
   white-space: nowrap;
   background: var(--grad-gold);
   color: #2b1d08;
@@ -757,31 +770,34 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 /* ---------- Living badge (brand mark, animated) ----------
    The badge artwork (assets/suved-badge.png) is a framed gold
-   emblem on a dark ground; it is never recolored or cropped here,
-   only mounted, glowed, and drifted with gold dust so it reads as
-   alive against the site's cream/purple/gold theme. */
+   emblem on a dark ground that matches the page (#12161F); it is
+   never recolored or cropped here, only mounted and bathed in a
+   golden radiance. The glow never falls below its bright resting
+   state — it only swells brighter, so the mark reads as shining
+   gold at every point of the cycle (no dim/"black out" phase). */
 
-/* Small variant — nav + footer brand icon: a soft breathing glow,
-   no layered elements so it stays cheap when repeated. */
+/* Small variant — nav + footer brand icon: a golden shine that
+   gently intensifies; no layered elements so it stays cheap when
+   repeated. */
 .emblem-sm {
-  animation: badgeSmBreathe 6s ease-in-out infinite;
+  animation: badgeSmShine 6s ease-in-out infinite;
   transform-origin: 50%;
+  filter: drop-shadow(0 0 10px rgba(233, 200, 126, 0.55));
 }
-@keyframes badgeSmBreathe {
+@keyframes badgeSmShine {
   0%, 100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 8px rgba(233, 200, 126, 0.25));
+    filter: drop-shadow(0 0 10px rgba(233, 200, 126, 0.55));
   }
   50% {
-    transform: scale(1.06);
-    filter: drop-shadow(0 0 14px rgba(233, 200, 126, 0.55));
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 18px rgba(244, 214, 140, 0.9));
   }
 }
 
-/* Large variant — the About section centerpiece: an ambient gold
-   halo bridging the badge's dark ground into the cream frame, a
-   slow breathing scale, a diagonal light-sweep sheen over the gold
-   linework, and drifting dust in the halo around it. */
+/* Large variant — the About section centerpiece: a steady ambient
+   gold halo around the badge, a slow breathing scale, and drifting
+   dust in the halo around it. */
 .badge-lg { position: relative; }
 
 .badge-lg__halo {
@@ -789,13 +805,13 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   inset: -16%;
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(228, 195, 122, 0.45), rgba(184, 134, 46, 0.16) 55%, transparent 78%);
+  background: radial-gradient(closest-side, rgba(233, 200, 126, 0.55), rgba(184, 134, 46, 0.2) 55%, transparent 78%);
   filter: blur(14px);
   animation: badgeHaloPulse 8s ease-in-out infinite;
 }
 @keyframes badgeHaloPulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50%      { opacity: 0.9; transform: scale(1.07); }
+  0%, 100% { opacity: 0.82; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.07); }
 }
 
 .badge-lg__stage {
@@ -818,25 +834,6 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   object-fit: cover;
   user-select: none;
   -webkit-user-drag: none;
-}
-
-.badge-lg__sheen {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  background: linear-gradient(115deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.35) 46%,
-    rgba(255, 233, 176, 0.6) 50%,
-    rgba(255, 255, 255, 0.35) 54%,
-    transparent 65%);
-  background-size: 260% 260%;
-  animation: badgeSheenSweep 7s ease-in-out infinite;
-}
-@keyframes badgeSheenSweep {
-  0%   { background-position: 120% -20%; }
-  50%  { background-position: -20% 120%; }
-  100% { background-position: 120% -20%; }
 }
 
 .badge-lg__dust { position: absolute; inset: -18%; width: 136%; height: 136%; pointer-events: none; }
@@ -884,7 +881,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: -30% 0;
-  background: radial-gradient(58% 78% at 50% 50%, rgba(18, 10, 32, 0.55), transparent 78%);
+  background: radial-gradient(58% 78% at 50% 50%, rgba(23, 30, 43, 0.55), transparent 78%);
   pointer-events: none;
 }
 .cert-strip__inner { position: relative; text-align: center; }
@@ -932,7 +929,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   transform: translateY(-50%);
   height: 72%;
   width: 1px;
-  background: linear-gradient(transparent, rgba(201, 178, 228, 0.25), transparent);
+  background: linear-gradient(transparent, rgba(183, 196, 221, 0.25), transparent);
 }
 .cert-strip__icon {
   width: 58px;
@@ -1029,9 +1026,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 .card--featured {
   background:
-    radial-gradient(420px 260px at 100% 0%, rgba(157, 111, 196, 0.16), transparent 65%),
+    radial-gradient(420px 260px at 100% 0%, rgba(127, 150, 194, 0.16), transparent 65%),
     var(--glass-strong);
-  border-color: rgba(201, 178, 228, 0.3);
+  border-color: rgba(183, 196, 221, 0.3);
 }
 
 .card__ribbon {
@@ -1184,7 +1181,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   left: 4%;
   right: 4%;
   height: 2px;
-  background: rgba(201, 178, 228, 0.14);
+  background: rgba(183, 196, 221, 0.14);
   z-index: 0;
 }
 .journey__line::after {
@@ -1217,7 +1214,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--gold-bright);
-  background: rgba(18, 10, 32, 0.85);
+  background: rgba(23, 30, 43, 0.85);
   border: 1.5px solid rgba(212, 169, 79, 0.55);
   box-shadow: 0 0 24px -4px rgba(212, 169, 79, 0.4);
   margin-bottom: 1.1rem;
@@ -1243,7 +1240,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   inset: -20% -10%;
   background:
     radial-gradient(460px 460px at 80% 60%, rgba(212, 169, 79, 0.1), transparent 60%),
-    radial-gradient(420px 420px at 15% 75%, rgba(157, 111, 196, 0.12), transparent 60%);
+    radial-gradient(420px 420px at 15% 75%, rgba(127, 150, 194, 0.12), transparent 60%);
   -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 35%, transparent 95%);
   mask-image: radial-gradient(70% 70% at 50% 50%, #000 35%, transparent 95%);
   pointer-events: none;
@@ -1259,7 +1256,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   color: var(--gold-pale);
   max-width: 26ch;
   margin-inline: auto;
-  text-shadow: 0 0 60px rgba(233, 200, 126, 0.25), 0 2px 30px rgba(11, 7, 20, 0.9);
+  text-shadow: 0 0 60px rgba(233, 200, 126, 0.25), 0 2px 30px rgba(18, 22, 31, 0.9);
 }
 .quoteband cite {
   display: block;
@@ -1323,6 +1320,74 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   color: var(--ink-faint);
 }
 
+/* ---------- Reviews — share your experience ---------- */
+.reviews-share {
+  margin-top: clamp(2.6rem, 6vw, 4rem);
+  text-align: center;
+}
+.review-form {
+  max-width: 660px;
+  margin: 2rem auto 0;
+  text-align: left;
+}
+
+.rating-field { border: 0; padding: 0; margin: 0; }
+.rating-field legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  margin-bottom: 0.5rem;
+}
+/* stars are laid out row-reverse so "input:checked ~ label" lights the
+   selected star and every star displayed to its left */
+.rating-input {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.4rem;
+}
+.rating-input input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.rating-input label {
+  font-size: 2rem;
+  line-height: 1;
+  color: rgba(237, 232, 220, 0.22);
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s var(--ease-out), text-shadow 0.2s;
+}
+.rating-input input:checked ~ label,
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px rgba(233, 200, 126, 0.5);
+}
+.rating-input label:hover { transform: scale(1.12); }
+.rating-input input:focus-visible + label {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Admin — review moderation (admin/reviews.html) ---------- */
+.admin-body { padding: clamp(2.5rem, 6vw, 4rem) 0 5rem; }
+.admin__head { text-align: center; margin-bottom: 2.5rem; }
+.admin__hint { color: var(--ink-soft); max-width: 52ch; margin-inline: auto; }
+.admin__auth { max-width: 430px; margin-inline: auto; }
+.admin__section { margin-top: 3rem; }
+.admin__section h2 { font-size: 1.6rem; margin-bottom: 1.2rem; color: var(--ink); }
+.admin__count { color: var(--gold-bright); }
+.admin__grid { display: grid; gap: 1.2rem; }
+.admin__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.1rem; }
+.admin__actions .btn { padding: 0.55rem 1.3rem; font-size: 0.78rem; }
+.admin__empty { color: var(--ink-faint); }
+.admin__footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem; margin-top: 3rem; }
+
 /* ---------- Contact — Chapter VI: the radiant orb ---------- */
 .contact__grid {
   display: grid;
@@ -1359,7 +1424,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .contact__channels p { color: var(--ink-soft); }
 
 .contact__form {
-  background: rgba(18, 10, 32, 0.55);
+  background: rgba(23, 30, 43, 0.55);
   border: 1px solid var(--glass-border);
   border-radius: calc(var(--radius) * 1.2);
   box-shadow: var(--shadow-soft);
@@ -1391,8 +1456,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 1rem;
   font-weight: 300;
   color: var(--ink);
-  background: rgba(237, 228, 251, 0.05);
-  border: 1px solid rgba(201, 178, 228, 0.22);
+  background: rgba(237, 232, 220, 0.05);
+  border: 1px solid rgba(183, 196, 221, 0.22);
   border-radius: 12px;
   padding: 0.85rem 1rem;
   transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
@@ -1405,11 +1470,11 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .form-field textarea:focus {
   outline: none;
   border-color: var(--gold-bright);
-  background: rgba(237, 228, 251, 0.08);
+  background: rgba(237, 232, 220, 0.08);
   box-shadow: 0 0 0 4px rgba(233, 200, 126, 0.12);
 }
 .form-field input::placeholder,
-.form-field textarea::placeholder { color: rgba(185, 168, 214, 0.45); }
+.form-field textarea::placeholder { color: rgba(175, 185, 201, 0.45); }
 
 .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
 
@@ -1429,7 +1494,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent, rgba(8, 5, 15, 0.92) 60%);
+  background: linear-gradient(to bottom, transparent, rgba(11, 14, 20, 0.92) 60%);
   pointer-events: none;
 }
 .footer .container { position: relative; }
@@ -1539,7 +1604,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--ink);
-  background: rgba(18, 10, 32, 0.92);
+  background: rgba(23, 30, 43, 0.92);
   border: 1px solid rgba(37, 211, 102, 0.55);
   border-radius: 999px;
   padding: 0.55rem 1.2rem;
@@ -1588,8 +1653,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
     padding: calc(var(--nav-h) + 1rem) 1.5rem 2rem;
     overflow-y: auto;
     background:
-      radial-gradient(700px 500px at 70% 20%, rgba(84, 48, 138, 0.45), transparent 60%),
-      rgba(11, 7, 20, 0.97);
+      radial-gradient(700px 500px at 70% 20%, rgba(40, 56, 86, 0.45), transparent 60%),
+      rgba(18, 22, 31, 0.97);
     transform: translateY(-100%);
     /* visibility/opacity keep the closed menu fully hidden even if an
        ancestor transform ever confines the fixed overlay (defense in depth). */

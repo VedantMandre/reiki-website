@@ -49,3 +49,31 @@ sets still carry the old branding and need image tooling to regenerate:
    `assets/suved-badge.png` directly (near-square), which works but a proper
    1200×630 banner renders better; update the `og:image`/`twitter:image`
    tags in `index.html` when ready.
+
+## Customer reviews — one-time setup (July 2026)
+
+The site now has a "Share Your Experience" form in the Testimonials
+section. Submissions are stored **privately** in a free Cloudflare D1
+database and appear on the website only after you approve them at
+`https://suved-healing.pages.dev/admin/reviews.html` (each submission also
+emails you via FormSubmit with that link). Approval is instant — no code
+change or redeploy involved. Before the first review can be accepted, do
+this once (~5 minutes, needs the Cloudflare account):
+
+10. **Create the database:** in a terminal with Node installed, run
+    `npx wrangler d1 create suved-reviews` (it will open a browser to log in
+    to Cloudflare). Copy the `database_id` it prints into `wrangler.toml`
+    (replacing `TODO-set-after-owner-creates-db`), commit, and push.
+11. **Create the reviews table:** run
+    `npx wrangler d1 execute suved-reviews --remote --file=db/schema.sql`.
+12. **Set the moderation passphrase:** Cloudflare dashboard → Workers &
+    Pages → `suved-healing` → Settings → Variables and Secrets → add a
+    secret named `MODERATION_SECRET` with a passphrase of your choice
+    (this is what you type on the approval page — pick something long).
+13. **Check the deploy token:** the GitHub secret `CLOUDFLARE_API_TOKEN`
+    was created for Pages-only deploys. If the next deploy fails with a
+    D1 permission error, edit the token at dash.cloudflare.com → My
+    Profile → API Tokens and add the **D1: Edit** permission.
+14. **Try it end to end:** submit a test review on the live site, open the
+    admin link from the notification email, enter the passphrase, click
+    Approve, and confirm the review appears in the Testimonials section.

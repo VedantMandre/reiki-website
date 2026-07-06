@@ -650,12 +650,14 @@
     }
 
     /* one formation per chapter, in page order */
+    /* palette matches the badge-navy theme: antique gold, moonlit
+       steel blue, and ivory (see css/style.css tokens) */
     var formations = [
-      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#9d6fc4", "#c9b2e4", "#fdf6e3"]) },
-      { pos: makeLotus(),         col: makeColors(["#e8a7c8", "#c9b2e4", "#e9c87e", "#f7d9ea"]) },
-      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#c9b2e4", "#aab98c"]) },
-      { pos: makeHelix(),         col: makeColors(["#9d6fc4", "#c9b2e4", "#e9c87e", "#ede4fb"]) },
-      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#c9b2e4", "#ffffff"]) },
+      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#7f96c2", "#b7c4dd", "#fdf6e3"]) },
+      { pos: makeLotus(),         col: makeColors(["#f2dfae", "#b7c4dd", "#e9c87e", "#fdf3d9"]) },
+      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#b7c4dd", "#aab98c"]) },
+      { pos: makeHelix(),         col: makeColors(["#7f96c2", "#b7c4dd", "#e9c87e", "#e8edf6"]) },
+      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#b7c4dd", "#ffffff"]) },
       { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) }
     ];
 
@@ -941,6 +943,129 @@
         submitBtn.disabled = false;
       });
   });
+
+  /* =====================================================
+     Customer reviews — approved entries load from the
+     Pages Function API (/api/reviews); new submissions are
+     stored as pending until approved on /admin/reviews.html
+     ===================================================== */
+  (function initReviews() {
+    var grid = document.querySelector(".testimonials__grid");
+
+    if (grid && window.fetch) {
+      fetch("/api/reviews")
+        .then(function (res) {
+          if (!res.ok) throw new Error("bad status");
+          return res.json();
+        })
+        .then(function (data) {
+          (data.reviews || []).forEach(function (review) {
+            var fig = document.createElement("figure");
+            fig.className = "testimonial";
+            var stars = document.createElement("div");
+            stars.className = "testimonial__stars";
+            stars.textContent = "★★★★★".slice(0, review.rating);
+            var quote = document.createElement("blockquote");
+            quote.textContent = "“" + review.message + "”";
+            var caption = document.createElement("figcaption");
+            var name = document.createElement("strong");
+            name.textContent = review.name;
+            var svc = document.createElement("span");
+            svc.textContent = review.service;
+            caption.appendChild(name);
+            caption.appendChild(svc);
+            fig.appendChild(stars);
+            fig.appendChild(quote);
+            fig.appendChild(caption);
+            grid.appendChild(fig);
+          });
+        })
+        .catch(function () {
+          /* API absent (plain static preview) — keep the static cards */
+        });
+    }
+
+    var toggle = document.getElementById("reviewToggle");
+    var reviewForm = document.getElementById("reviewForm");
+    var reviewNote = document.getElementById("reviewNote");
+    if (!toggle || !reviewForm) return;
+
+    toggle.addEventListener("click", function () {
+      var open = reviewForm.hidden;
+      reviewForm.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+      if (open) document.getElementById("reviewName").focus();
+    });
+
+    reviewForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var rating = reviewForm.elements.rating.value;
+      if (!rating) {
+        reviewNote.textContent = "Please choose a star rating.";
+        return;
+      }
+      if (!reviewForm.checkValidity()) {
+        reviewNote.textContent = "Please fill in your name and a short review (at least 10 characters).";
+        return;
+      }
+
+      var payload = {
+        name: reviewForm.elements.name.value.trim(),
+        service: reviewForm.elements.service.value,
+        rating: Number(rating),
+        message: reviewForm.elements.message.value.trim(),
+        _honey: reviewForm.elements._honey.value
+      };
+      var submitButton = reviewForm.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+      reviewNote.textContent = "Sending your review…";
+
+      fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+        })
+        .then(function (r) {
+          if (!r.ok) {
+            /* surface the API's own message (validation, rate limit) but
+               never raw browser/network errors */
+            var apiError = new Error((r.data && r.data.error) || "");
+            apiError.fromApi = true;
+            throw apiError;
+          }
+          reviewNote.textContent = "Thank you, " + payload.name + " — your review will appear here once it is approved. ✦";
+          gtag("event", "review_submit", { event_category: "engagement", event_label: payload.service });
+          /* fire-and-forget owner notification via FormSubmit (the same
+             free service as the contact form), with the approval link */
+          fetch("https://formsubmit.co/ajax/sujata.mandre@gmail.com", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              _subject: "New review awaiting approval — Suved Healers",
+              _template: "table",
+              name: payload.name,
+              service: payload.service,
+              rating: payload.rating + "/5",
+              review: payload.message,
+              approve_here: "https://suved-healing.pages.dev/admin/reviews.html"
+            })
+          }).catch(function () {});
+          reviewForm.reset();
+        })
+        .catch(function (err) {
+          reviewNote.textContent = err && err.fromApi && err.message
+            ? err.message
+            : "Could not send your review right now — please WhatsApp it to us instead.";
+        })
+        .finally(function () {
+          submitButton.disabled = false;
+        });
+    });
+  })();
 
   /* WhatsApp chooser: the FAB reveals one chat link per healer */
   var waGroup = document.getElementById("waGroup");

@@ -1,0 +1,5 @@
+# Wrangler local state (local D1 data, caches)
+.wrangler/
+# Local secrets for `wrangler pages dev` (e.g. MODERATION_SECRET)
+.dev.vars
+node_modules/
