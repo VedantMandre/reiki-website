@@ -62,8 +62,10 @@ this once (~5 minutes, needs the Cloudflare account):
 
 10. **Create the database:** in a terminal with Node installed, run
     `npx wrangler d1 create suved-reviews` (it will open a browser to log in
-    to Cloudflare). Copy the `database_id` it prints into `wrangler.toml`
-    (replacing `TODO-set-after-owner-creates-db`), commit, and push.
+    to Cloudflare). Then in `wrangler.toml`, uncomment the three
+    `[[d1_databases]]` lines and replace the placeholder `database_id` with
+    the UUID wrangler printed; commit and push. (The binding ships commented
+    out because deploying it before the database exists fails the deploy.)
 11. **Create the reviews table:** run
     `npx wrangler d1 execute suved-reviews --remote --file=db/schema.sql`.
 12. **Set the moderation passphrase:** Cloudflare dashboard → Workers &

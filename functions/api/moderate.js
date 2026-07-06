@@ -28,6 +28,7 @@ function authorized(request, env) {
 
 export async function onRequestGet({ request, env }) {
   if (!authorized(request, env)) return json({ error: "Unauthorized" }, 401);
+  if (!env.DB) return json({ error: "Reviews database is not configured yet — see OWNER-RUNBOOK.md step 10." }, 503);
 
   const pending = await env.DB.prepare(
     "SELECT id, name, service, rating, message, created_at FROM reviews WHERE status = 'pending' ORDER BY created_at ASC, id ASC"
@@ -41,6 +42,7 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequestPost({ request, env }) {
   if (!authorized(request, env)) return json({ error: "Unauthorized" }, 401);
+  if (!env.DB) return json({ error: "Reviews database is not configured yet — see OWNER-RUNBOOK.md step 10." }, 503);
 
   let body;
   try {

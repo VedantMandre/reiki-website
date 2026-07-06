@@ -1,13 +1,17 @@
 # Cloudflare Pages configuration.
-# The D1 binding below is applied to the suved-healing Pages project on
-# every `wrangler pages deploy` (see .github/workflows/deploy-cloudflare.yml).
-# database_id must be filled in once after the owner runs
-# `npx wrangler d1 create suved-reviews` — see OWNER-RUNBOOK.md.
 name = "suved-healing"
 pages_build_output_dir = "."
 compatibility_date = "2026-07-01"
 
-[[d1_databases]]
-binding = "DB"
-database_name = "suved-reviews"
-database_id = "TODO-set-after-owner-creates-db"
+# ── Reviews database ──────────────────────────────────────────────
+# The D1 binding stays commented out until the database exists:
+# deploying a binding whose database_id doesn't exist fails the whole
+# deploy. After running `npx wrangler d1 create suved-reviews`
+# (OWNER-RUNBOOK.md step 10), uncomment the three lines below and
+# replace the id with the one wrangler prints. Until then the site
+# deploys fine and the review form degrades gracefully.
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "suved-reviews"
+# database_id = "PASTE-THE-UUID-FROM-WRANGLER-D1-CREATE"

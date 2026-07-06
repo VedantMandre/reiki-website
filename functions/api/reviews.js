@@ -20,6 +20,9 @@ function json(body, status = 200, extraHeaders = {}) {
 }
 
 export async function onRequestGet({ env }) {
+  // D1 binding not configured yet (OWNER-RUNBOOK.md step 10) — behave
+  // like "no reviews" instead of erroring
+  if (!env.DB) return json({ reviews: [] }, 200, { "Cache-Control": "no-store" });
   const { results } = await env.DB.prepare(
     "SELECT id, name, service, rating, message, created_at FROM reviews WHERE status = 'approved' ORDER BY created_at DESC, id DESC LIMIT 50"
   ).all();
@@ -36,6 +39,10 @@ async function hashIp(ip, salt) {
 }
 
 export async function onRequestPost({ request, env }) {
+  if (!env.DB) {
+    return json({ error: "Reviews are not set up yet — please WhatsApp us your review instead." }, 503);
+  }
+
   let body;
   try {
     body = await request.json();
