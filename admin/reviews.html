@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Moderation — Suved Healers</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#12161f" />
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self';" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+  <script defer src="reviews.js"></script>
+</head>
+<body class="admin-body">
+  <main class="container admin">
+    <header class="admin__head">
+      <p class="eyebrow">Suved Healers — Private</p>
+      <h1 class="section-title">Review <span class="text-gradient">Moderation</span></h1>
+      <p class="admin__hint">
+        Approving a review publishes it to the website instantly.
+        Rejecting removes it (also works to unpublish an approved review).
+      </p>
+    </header>
+
+    <form class="admin__auth contact__form" id="authForm">
+      <div class="form-field">
+        <label for="secret">Moderation passphrase</label>
+        <input type="password" id="secret" name="secret" autocomplete="current-password" placeholder="Enter the passphrase" required />
+      </div>
+      <button type="submit" class="btn btn--gold">Unlock ✦</button>
+      <p class="form-note" id="authNote" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="admin__lists" id="lists" hidden>
+      <section class="admin__section">
+        <h2>Awaiting approval <span class="admin__count" id="pendingCount"></span></h2>
+        <div class="admin__grid" id="pendingList"></div>
+        <p class="admin__empty" id="pendingEmpty" hidden>Nothing waiting — all caught up. ✦</p>
+      </section>
+
+      <section class="admin__section">
+        <h2>Recently published</h2>
+        <div class="admin__grid" id="approvedList"></div>
+        <p class="admin__empty" id="approvedEmpty" hidden>No published reviews yet.</p>
+      </section>
+
+      <p class="admin__footer">
+        <button type="button" class="btn btn--ghost" id="refreshBtn">Refresh</button>
+        <button type="button" class="btn btn--ghost" id="lockBtn">Forget passphrase on this device</button>
+      </p>
+    </div>
+  </main>
+</body>
+</html>

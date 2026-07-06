@@ -83,6 +83,9 @@ body {
 
 img { max-width: 100%; display: block; }
 a { color: var(--lilac); text-decoration: none; }
+/* the hidden attribute must win even over display:grid/flex rules
+   (used by the review form and the admin moderation page) */
+[hidden] { display: none !important; }
 ul, ol { list-style: none; }
 strong { font-weight: 500; color: var(--ink); }
 
@@ -1316,6 +1319,74 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+
+/* ---------- Reviews — share your experience ---------- */
+.reviews-share {
+  margin-top: clamp(2.6rem, 6vw, 4rem);
+  text-align: center;
+}
+.review-form {
+  max-width: 660px;
+  margin: 2rem auto 0;
+  text-align: left;
+}
+
+.rating-field { border: 0; padding: 0; margin: 0; }
+.rating-field legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  margin-bottom: 0.5rem;
+}
+/* stars are laid out row-reverse so "input:checked ~ label" lights the
+   selected star and every star displayed to its left */
+.rating-input {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.4rem;
+}
+.rating-input input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.rating-input label {
+  font-size: 2rem;
+  line-height: 1;
+  color: rgba(237, 232, 220, 0.22);
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s var(--ease-out), text-shadow 0.2s;
+}
+.rating-input input:checked ~ label,
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px rgba(233, 200, 126, 0.5);
+}
+.rating-input label:hover { transform: scale(1.12); }
+.rating-input input:focus-visible + label {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Admin — review moderation (admin/reviews.html) ---------- */
+.admin-body { padding: clamp(2.5rem, 6vw, 4rem) 0 5rem; }
+.admin__head { text-align: center; margin-bottom: 2.5rem; }
+.admin__hint { color: var(--ink-soft); max-width: 52ch; margin-inline: auto; }
+.admin__auth { max-width: 430px; margin-inline: auto; }
+.admin__section { margin-top: 3rem; }
+.admin__section h2 { font-size: 1.6rem; margin-bottom: 1.2rem; color: var(--ink); }
+.admin__count { color: var(--gold-bright); }
+.admin__grid { display: grid; gap: 1.2rem; }
+.admin__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.1rem; }
+.admin__actions .btn { padding: 0.55rem 1.3rem; font-size: 0.78rem; }
+.admin__empty { color: var(--ink-faint); }
+.admin__footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem; margin-top: 3rem; }
 
 /* ---------- Contact — Chapter VI: the radiant orb ---------- */
 .contact__grid {
