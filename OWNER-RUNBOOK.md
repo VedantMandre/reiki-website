@@ -79,3 +79,47 @@ this once (~5 minutes, needs the Cloudflare account):
 14. **Try it end to end:** submit a test review on the live site, open the
     admin link from the notification email, enter the passphrase, click
     Approve, and confirm the review appears in the Testimonials section.
+
+## New homepage sections (July 2026)
+
+The homepage gained four sections modeled on artofhealing.co.in: an
+**Upcoming Events** banner (after the scrolling ribbon), a **Courses &
+Attunements** card grid (after Services), a **Why Seekers Choose Us**
+grid (after Courses), and an **FAQ** accordion (before Contact). They
+shipped with carefully-marked placeholder content — every spot that
+needs the owner's confirmation carries a `TODO: owner` HTML comment in
+`index.html`.
+
+15. **Confirm the placeholder content** (search `index.html` for
+    `TODO: owner`):
+    - **Event**: title, date, time, platform (Zoom?), hosts, and whether
+      it is free. If no event is planned, delete the `<article>` block —
+      the section still reads fine with just the "More events announced
+      soon" line.
+    - **Courses**: names/levels (are the Japanese level names Shoden /
+      Okuden / Shinpiden wanted?), languages (English · Hindi · Marathi
+      is assumed), online vs in-person, certificate claims, and whether
+      the **Numerology Foundation Course** actually exists.
+    - **Why-us stats**: the band currently repeats the verified hero
+      numbers (10+ years / 1,500+ lives / 4 disciplines). If you can
+      vouch for stronger figures (sessions given, students attuned,
+      countries reached), swap them in — never publish unverified ones.
+    - **FAQ answers**: review all eight for accuracy — especially the
+      medical-disclaimer answer and the numerology-requirements answer.
+      If you edit any question or answer, make the **same edit** in the
+      matching `FAQPage` JSON-LD block in the `<head>` of `index.html`
+      (Google requires the structured data to mirror the visible text).
+
+16. **Editing the events banner later:** full instructions live in an
+    HTML comment directly above the `<section id="events">` block in
+    `index.html` — add an event by copy-pasting the `<article>` block,
+    remove one by deleting it. The date chip is the `<strong>` (day)
+    and `<span>` (month); the Register button already scrolls to the
+    contact form and preselects "Event / Webinar Registration".
+
+17. **Editing course cards later:** each course is one
+    `<article class="card">` inside `<section id="courses">`. Copy one
+    to add a course; the small chips under the title (format, language,
+    certificate) are plain `<li>` items in the `course-meta` list. Keep
+    the "Most Popular" ribbon (`card--featured` + `card__ribbon`) on at
+    most one card.

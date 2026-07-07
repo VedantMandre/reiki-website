@@ -106,6 +106,52 @@
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Spiritual Consultation", "description": "One-on-one spiritual guidance and meditation coaching." } },
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reiki Courses & Attunements", "description": "Reiki Level 1, Level 2, Reiki Master, and Reiki Grandmaster training and attunements." } }
         ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://suved-healing.pages.dev/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Reiki, and how does it work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Reiki is a gentle Japanese energy-healing practice in which a trained practitioner channels universal life-force energy through their hands. It works with your body's own energy system to release blockages, calm the nervous system, and support natural healing on physical, emotional, and spiritual levels." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does distance (online) Reiki really work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Reiki is not limited by physical distance — in a distance session, your healer connects with your energy at an agreed time while you rest comfortably at home. Clients around the world report the same warmth, calm, and clarity as in-person sessions." }
+          },
+          {
+            "@type": "Question",
+            "name": "What will I feel during a session?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Most people feel deep relaxation — often warmth or gentle tingling where energy is flowing, sometimes an emotional release, or simply a peaceful, meditative stillness. You remain fully clothed and simply rest; no touch is required." }
+          },
+          {
+            "@type": "Question",
+            "name": "How many sessions will I need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It depends on what you are working through. Many people feel a shift after a single session, while deeper or long-standing patterns respond best to a short series of three to five sessions. Your healer will suggest a rhythm after your first session — there is never pressure to continue." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Reiki a replacement for medical treatment?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Reiki is a complementary practice that supports well-being alongside professional medical care — it is not a substitute for medical diagnosis or treatment. Please continue any treatment prescribed by your doctor; Reiki works gently alongside it." }
+          },
+          {
+            "@type": "Question",
+            "name": "What do you need from me for a numerology reading?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Just your full name as commonly written, your date of birth, and the questions or life areas you would like clarity on — career, relationships, health, or name correction. Readings can be done entirely online." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need experience to join a Reiki course? Will I get a certificate?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No experience is needed — Level 1 is designed for complete beginners, and each level builds gently on the last. Every course includes your attunement from a certified Reiki Grandmaster, a certificate, and mentorship as you begin to practice." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I book a session, and what are the fees?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Send us a message through the contact form below, or reach either healer directly on WhatsApp. We will find a time that suits you and share current session and course fees — sessions are available in person and online, worldwide." }
+          }
+        ]
       }
     ]
   }
@@ -151,6 +197,7 @@
         <a href="#home" class="nav__link is-active" data-cursor>Home</a>
         <a href="#about" class="nav__link" data-cursor>About</a>
         <a href="#services" class="nav__link" data-cursor>Services</a>
+        <a href="#courses" class="nav__link" data-cursor>Courses</a>
         <a href="#journey" class="nav__link" data-cursor>Journey</a>
         <a href="#testimonials" class="nav__link" data-cursor>Testimonials</a>
         <a href="#contact" class="nav__link" data-cursor>Contact</a>
@@ -233,6 +280,40 @@
         <span class="marquee__item">Healing from Within</span><span class="marquee__sep">✦</span>
       </div>
     </div>
+
+    <!-- ===== Upcoming Events ==========================================
+         HOW TO EDIT (owner):
+         1. Each event is one <article class="events-strip__event"> block.
+            To add another event, copy a whole <article> ... </article>
+            block and paste it below the existing one. Delete the block
+            once the event is past.
+         2. In each block, update:
+            - the date chip: big day number inside <strong>, short month
+              inside <span> (e.g. <strong>05</strong><span>Aug</span>)
+            - the event title in <h3 class="events-strip__title">
+            - the meta line (format, time, host) in
+              <p class="events-strip__meta">
+         3. The "Register Free" button scrolls visitors to the contact
+            form and preselects "Event / Webinar Registration" for them.
+         4. If there are no events, delete every <article> block; the
+            "More events announced soon" line keeps the section looking
+            intentional on its own.
+         ================================================================ -->
+    <section class="events-strip" id="events" aria-label="Upcoming events and webinars">
+      <div class="container events-strip__inner">
+        <p class="events-strip__label" data-reveal><span>Upcoming Events</span></p>
+        <!-- TODO: owner confirm event details — title, date, time, platform, hosts, and whether it is free -->
+        <article class="events-strip__event" data-reveal>
+          <div class="events-strip__date" aria-hidden="true"><strong>05</strong><span>Aug</span></div>
+          <div class="events-strip__body">
+            <h3 class="events-strip__title">Free Reiki Healing Webinar — Experience Energy Healing Live</h3>
+            <p class="events-strip__meta">Online (Zoom) · 7:00 PM IST · With Sujata Mandre &amp; Veda More</p>
+          </div>
+          <a href="#contact" class="btn btn--gold events-strip__cta" data-preselect="event" data-magnetic>Register Free</a>
+        </article>
+        <p class="events-strip__soon" data-reveal>More events &amp; webinars announced soon ✦</p>
+      </div>
+    </section>
 
     <!-- ===== About ===== -->
     <section class="section about" id="about">
@@ -497,6 +578,159 @@
       </div>
     </section>
 
+    <!-- ===== Courses ===== -->
+    <section class="section courses" id="courses">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" data-reveal>Learn to Heal</p>
+          <h2 class="section-title" data-split>Courses &amp; <span class="text-gradient">Attunements</span></h2>
+          <p class="section-sub" data-reveal>
+            Step onto the healer's path yourself — structured courses guided personally by a
+            certified Reiki Grandmaster, from your first attunement to teaching mastery.
+          </p>
+        </div>
+        <!-- TODO: owner confirm all course facts — names/levels, languages, online vs in-person,
+             certificate claims, and whether the Numerology Foundation Course is offered -->
+        <div class="courses__grid" data-stagger>
+          <article class="card" data-tilt>
+            <div class="card__glow" aria-hidden="true"></div>
+            <div class="card__icon">🌱</div>
+            <h3 class="card__title">Reiki Level 1 <span class="course-card__level">Shoden</span></h3>
+            <ul class="course-meta" aria-label="Course details">
+              <li>Online &amp; In-person</li>
+              <li>English · Hindi · Marathi</li>
+              <li>Certificate included</li>
+            </ul>
+            <p class="card__text">
+              Your first step into energy healing — receive your first attunement and learn to
+              give yourself Reiki every day.
+            </p>
+            <ul class="card__list">
+              <li>History &amp; principles of Usui Reiki</li>
+              <li>Self-healing hand positions</li>
+              <li>First attunement ceremony</li>
+            </ul>
+            <a href="#contact" class="card__link" data-cursor data-preselect="courses">Enquire About This Course →</a>
+          </article>
+          <article class="card card--featured" data-tilt>
+            <span class="card__ribbon">Most Popular</span>
+            <div class="card__glow" aria-hidden="true"></div>
+            <div class="card__icon">✨</div>
+            <h3 class="card__title">Reiki Level 2 <span class="course-card__level">Okuden</span></h3>
+            <ul class="course-meta" aria-label="Course details">
+              <li>Online &amp; In-person</li>
+              <li>English · Hindi · Marathi</li>
+              <li>Certificate included</li>
+            </ul>
+            <p class="card__text">
+              Deepen your practice with the three sacred symbols — and learn to send healing
+              across any distance.
+            </p>
+            <ul class="card__list">
+              <li>Sacred symbols &amp; their uses</li>
+              <li>Distance-healing techniques</li>
+              <li>Second attunement &amp; supervised practice</li>
+            </ul>
+            <a href="#contact" class="card__link" data-cursor data-preselect="courses">Enquire About This Course →</a>
+          </article>
+          <article class="card" data-tilt>
+            <div class="card__glow" aria-hidden="true"></div>
+            <div class="card__icon">🔱</div>
+            <h3 class="card__title">Reiki Master &amp; Grandmaster <span class="course-card__level">Shinpiden</span></h3>
+            <ul class="course-meta" aria-label="Course details">
+              <li>Online &amp; In-person</li>
+              <li>English · Hindi · Marathi</li>
+              <li>Certificate &amp; mentorship</li>
+            </ul>
+            <p class="card__text">
+              Complete the path — master-level attunements and the training to attune, guide,
+              and teach others.
+            </p>
+            <ul class="card__list">
+              <li>Master symbol &amp; attunements</li>
+              <li>Teaching methodology &amp; mentorship</li>
+              <li>Grandmaster training available</li>
+            </ul>
+            <a href="#contact" class="card__link" data-cursor data-preselect="courses">Enquire About This Course →</a>
+          </article>
+          <article class="card" data-tilt>
+            <div class="card__glow" aria-hidden="true"></div>
+            <div class="card__icon">🔢</div>
+            <h3 class="card__title">Numerology Foundation <span class="course-card__level">Course</span></h3>
+            <ul class="course-meta" aria-label="Course details">
+              <li>Online</li>
+              <li>English · Hindi · Marathi</li>
+              <li>Certificate included</li>
+            </ul>
+            <p class="card__text">
+              Decode the numbers that shape a life — learn to read charts, suggest name
+              corrections, and offer practical remedies.
+            </p>
+            <ul class="card__list">
+              <li>Life-path &amp; destiny numbers</li>
+              <li>Name analysis &amp; corrections</li>
+              <li>Practical remedies &amp; readings</li>
+            </ul>
+            <a href="#contact" class="card__link" data-cursor data-preselect="numerology-course">Enquire About This Course →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Why Choose Us ===== -->
+    <section class="section section--alt whyus" id="why-us">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" data-reveal>Why Suved</p>
+          <h2 class="section-title" data-split>Why Seekers <span class="text-gradient">Choose Us</span></h2>
+          <p class="section-sub" data-reveal>
+            Healing is a matter of trust. Here is what those who walk this path with us
+            hold dear.
+          </p>
+        </div>
+        <ul class="whyus__grid" data-stagger>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">📜</span>
+            <h3>Certified Grandmasters</h3>
+            <p>Two healers certified across all Usui Reiki degrees — up to Grandmaster level.</p>
+          </li>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">🔮</span>
+            <h3>Four Disciplines, One Path</h3>
+            <p>Reiki, crystals, numerology, and spiritual counsel blended into a plan that is yours alone.</p>
+          </li>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">🌍</span>
+            <h3>Healing Without Borders</h3>
+            <p>In-person sessions in India and distance healing that works across any time zone.</p>
+          </li>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">🕊️</span>
+            <h3>A Confidential Space</h3>
+            <p>Every conversation is held in complete privacy — with warmth, and without judgment.</p>
+          </li>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">🧭</span>
+            <h3>Guidance Beyond the Session</h3>
+            <p>Leave with practices, remedies, and follow-up support to carry your healing forward.</p>
+          </li>
+          <li class="whyus__item">
+            <span class="whyus__icon" aria-hidden="true">🪷</span>
+            <h3>A Decade of Devotion</h3>
+            <p>Over ten years of daily practice, study, and service on the healing path.</p>
+          </li>
+        </ul>
+        <!-- TODO: owner may replace these with stronger stats once confirmed, e.g.
+             healing sessions given, students attuned, countries reached. The numbers
+             below repeat the verified hero stats — do not publish unverified figures. -->
+        <ul class="whyus__stats" data-stagger>
+          <li><strong data-count="10" data-suffix="+">10+</strong><span>Years Devoted to Healing</span></li>
+          <li><strong data-count="1500" data-suffix="+">1,500+</strong><span>Lives Touched Worldwide</span></li>
+          <li><strong data-count="4" data-suffix="">4</strong><span>Disciplines Under One Roof</span></li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ===== Journey / How it works ===== -->
     <section class="section journey" id="journey">
       <div class="container">
@@ -622,6 +856,72 @@
       </div>
     </section>
 
+    <!-- ===== FAQ ===== -->
+    <section class="section section--alt faq" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" data-reveal>Wisdom &amp; Answers</p>
+          <h2 class="section-title" data-split>Frequently Asked <span class="text-gradient">Questions</span></h2>
+          <p class="section-sub" data-reveal>
+            Everything you may wonder before your first session — and honest answers.
+          </p>
+        </div>
+        <!-- TODO: owner review every answer for accuracy — especially the medical-disclaimer
+             answer and the numerology requirements. If answers change, also update the
+             matching FAQPage JSON-LD block in <head> so both stay identical. -->
+        <div class="faq__list" data-stagger>
+          <details class="faq__item">
+            <summary class="faq__question">What is Reiki, and how does it work?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>Reiki is a gentle Japanese energy-healing practice in which a trained practitioner channels universal life-force energy through their hands. It works with your body's own energy system to release blockages, calm the nervous system, and support natural healing on physical, emotional, and spiritual levels.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">Does distance (online) Reiki really work?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>Yes. Reiki is not limited by physical distance — in a distance session, your healer connects with your energy at an agreed time while you rest comfortably at home. Clients around the world report the same warmth, calm, and clarity as in-person sessions.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">What will I feel during a session?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>Most people feel deep relaxation — often warmth or gentle tingling where energy is flowing, sometimes an emotional release, or simply a peaceful, meditative stillness. You remain fully clothed and simply rest; no touch is required.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">How many sessions will I need?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>It depends on what you are working through. Many people feel a shift after a single session, while deeper or long-standing patterns respond best to a short series of three to five sessions. Your healer will suggest a rhythm after your first session — there is never pressure to continue.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">Is Reiki a replacement for medical treatment?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>No. Reiki is a complementary practice that supports well-being alongside professional medical care — it is not a substitute for medical diagnosis or treatment. Please continue any treatment prescribed by your doctor; Reiki works gently alongside it.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">What do you need from me for a numerology reading?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>Just your full name as commonly written, your date of birth, and the questions or life areas you would like clarity on — career, relationships, health, or name correction. Readings can be done entirely online.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">Do I need experience to join a Reiki course? Will I get a certificate?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>No experience is needed — Level 1 is designed for complete beginners, and each level builds gently on the last. Every course includes your attunement from a certified Reiki Grandmaster, a certificate, and mentorship as you begin to practice.</p>
+            </div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question">How do I book a session, and what are the fees?<span class="faq__indicator" aria-hidden="true"></span></summary>
+            <div class="faq__answer">
+              <p>Send us a message through the contact form below, or reach either healer directly on WhatsApp. We will find a time that suits you and share current session and course fees — sessions are available in person and online, worldwide.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== Contact ===== -->
     <section class="section contact" id="contact">
       <div class="container contact__grid">
@@ -679,6 +979,8 @@
               <option value="crystal">Crystal Remedies &amp; Healing</option>
               <option value="consultation">Spiritual Consultation</option>
               <option value="courses">Reiki Courses &amp; Attunements</option>
+              <option value="numerology-course">Numerology Course</option>
+              <option value="event">Event / Webinar Registration</option>
               <option value="other">Something else</option>
             </select>
           </div>
@@ -707,7 +1009,9 @@
         <nav class="footer__links" aria-label="Footer navigation">
           <a href="#about" data-cursor>About</a>
           <a href="#services" data-cursor>Services</a>
+          <a href="#courses" data-cursor>Courses</a>
           <a href="#testimonials" data-cursor>Testimonials</a>
+          <a href="#faq" data-cursor>FAQ</a>
           <a href="#contact" data-cursor>Contact</a>
         </nav>
         <p class="footer__copy">

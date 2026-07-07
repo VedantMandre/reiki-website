@@ -446,14 +446,23 @@
   /* =====================================================
      Three.js — the cosmos. One persistent point cloud
      fixed behind every chapter; as the visitor scrolls,
-     its particles morph between six formations:
+     its particles morph between six formations mapped
+     over nine chapters (a formation repeated across two
+     adjacent chapters simply HOLDS its shape there —
+     blending identical buffers is a no-op):
 
        home         → spiral galaxy
        about        → blooming lotus
        services     → sacred mandala rings
-       journey      → ascending double helix
+       courses      → sacred mandala rings (holds)
+       why-us       → ascending double helix (early morph)
+       journey      → ascending double helix (holds)
        testimonials → constellation sphere
+       faq          → constellation sphere (holds)
        contact      → radiant sun with halo
+
+     (#events is an announcement band, not a chapter, so
+     it stays out of the mapping.)
 
      Morphing runs on the GPU: the vertex shader blends
      between two position/color attribute sets with a uMix
@@ -649,17 +658,40 @@
       return arr;
     }
 
-    /* one formation per chapter, in page order */
     /* palette matches the badge-navy theme: antique gold, moonlit
        steel blue, and ivory (see css/style.css tokens) */
-    var formations = [
-      { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#7f96c2", "#b7c4dd", "#fdf6e3"]) },
-      { pos: makeLotus(),         col: makeColors(["#f2dfae", "#b7c4dd", "#e9c87e", "#fdf3d9"]) },
-      { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#b7c4dd", "#aab98c"]) },
-      { pos: makeHelix(),         col: makeColors(["#7f96c2", "#b7c4dd", "#e9c87e", "#e8edf6"]) },
-      { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#b7c4dd", "#ffffff"]) },
-      { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) }
+    var fGalaxy        = { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#7f96c2", "#b7c4dd", "#fdf6e3"]) };
+    var fLotus         = { pos: makeLotus(),         col: makeColors(["#f2dfae", "#b7c4dd", "#e9c87e", "#fdf3d9"]) };
+    var fMandala       = { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#b7c4dd", "#aab98c"]) };
+    var fHelix         = { pos: makeHelix(),         col: makeColors(["#7f96c2", "#b7c4dd", "#e9c87e", "#e8edf6"]) };
+    var fConstellation = { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#b7c4dd", "#ffffff"]) };
+    var fOrb           = { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) };
+
+    /* one formation per chapter, in page order — chapters and
+       formations are derived together so the two lists can never
+       drift out of lockstep (setSegment indexes both by segment).
+       A formation repeated on adjacent chapters holds its shape
+       across them; only changes of formation produce a morph. */
+    var chapterMap = [
+      ["home",         fGalaxy],
+      ["about",        fLotus],
+      ["services",     fMandala],
+      ["courses",      fMandala],
+      ["why-us",       fHelix],
+      ["journey",      fHelix],
+      ["testimonials", fConstellation],
+      ["faq",          fConstellation],
+      ["contact",      fOrb]
     ];
+    var chapters = [];
+    var formations = [];
+    chapterMap.forEach(function (pair) {
+      var el = document.getElementById(pair[0]);
+      if (el) {
+        chapters.push(el);
+        formations.push(pair[1]);
+      }
+    });
 
     /* ---------- geometry: two blendable position/color sets ---------- */
     var posA = new Float32Array(formations[0].pos);
@@ -730,10 +762,7 @@
     scene.add(points);
 
     /* ---------- scroll → segment + blend factor ---------- */
-    var chapters = ["home", "about", "services", "journey", "testimonials", "contact"]
-      .map(function (id) { return document.getElementById(id); })
-      .filter(Boolean);
-
+    /* (chapters is derived alongside formations above) */
     var anchors = [];
     function computeAnchors() {
       var vh = window.innerHeight;
@@ -945,6 +974,30 @@
   });
 
   /* =====================================================
+     Enquiry links — a link carrying data-preselect scrolls
+     to the contact form (the global anchor handler above
+     does the scrolling) and preselects the matching service
+     option so the visitor lands ready to write
+     ===================================================== */
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest("a[data-preselect]");
+    if (!link) return;
+    var select = document.getElementById("service");
+    if (!select) return;
+    var val = link.getAttribute("data-preselect");
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === val) {
+        select.value = val;
+        gtag("event", val === "event" ? "event_register_click" : "course_enquiry_click", {
+          event_category: "engagement",
+          event_label: val
+        });
+        break;
+      }
+    }
+  });
+
+  /* =====================================================
      Customer reviews — approved entries load from the
      Pages Function API (/api/reviews); new submissions are
      stored as pending until approved on /admin/reviews.html
@@ -1066,6 +1119,20 @@
         });
     });
   })();
+
+  /* FAQ — native <details> handles open/close on its own; this
+     only closes the other items so one answer is open at a time
+     (without JS several can stay open — also fine) */
+  var faqSection = document.getElementById("faq");
+  if (faqSection) {
+    /* 'toggle' does not bubble — the capture phase catches it */
+    faqSection.addEventListener("toggle", function (e) {
+      if (e.target.tagName !== "DETAILS" || !e.target.open) return;
+      faqSection.querySelectorAll("details[open]").forEach(function (d) {
+        if (d !== e.target) d.open = false;
+      });
+    }, true);
+  }
 
   /* WhatsApp chooser: the FAB reveals one chat link per healer */
   var waGroup = document.getElementById("waGroup");

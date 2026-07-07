@@ -1736,3 +1736,348 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   .marquee__track { animation: none; }
   .badge-lg__dust { display: none; }
 }
+
+/* ==========================================================
+   Additive sections: events / courses / why-us / faq
+   (appended block — everything below reuses the tokens and
+   component vocabulary defined above; the reduced-motion
+   overrides above still neutralize all motion added here)
+   ========================================================== */
+
+/* with 7 links the nav row needs a touch less air just above
+   the hamburger breakpoint */
+@media (max-width: 1100px) and (min-width: 881px) {
+  .nav__links { gap: 1.3rem; }
+}
+
+/* ---------- Events strip ---------- */
+/* An announcement band, not a chapter: floats in the cosmos
+   under the same soft elliptical veil as the cert strip */
+.events-strip {
+  position: relative;
+  z-index: 1;
+  padding: 3.4rem 0;
+  scroll-margin-top: var(--nav-h);
+}
+.events-strip::before {
+  content: "";
+  position: absolute;
+  inset: -30% 0;
+  background: radial-gradient(58% 78% at 50% 50%, rgba(10, 33, 48, 0.55), transparent 78%);
+  pointer-events: none;
+}
+.events-strip__inner { position: relative; }
+
+.events-strip__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ice);
+  margin-bottom: 2rem;
+}
+.events-strip__label::before,
+.events-strip__label::after {
+  content: "";
+  height: 1px;
+  width: min(150px, 18vw);
+  flex: 0 0 auto;
+}
+.events-strip__label::before { background: linear-gradient(to left, rgba(0, 180, 255, 0.45), transparent); }
+.events-strip__label::after { background: linear-gradient(to right, rgba(0, 180, 255, 0.45), transparent); }
+
+.events-strip__event {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.6rem;
+  max-width: 880px;
+  margin-inline: auto;
+  padding: 1.5rem 1.8rem;
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border-accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.events-strip__event + .events-strip__event { margin-top: 1rem; }
+
+.events-strip__date {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.1rem;
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  background: rgba(0, 180, 255, 0.06);
+  border: 1px solid var(--glass-border-accent);
+  box-shadow: 0 0 26px -8px rgba(0, 158, 219, 0.4);
+}
+.events-strip__date strong {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--azure);
+  font-variant-numeric: tabular-nums;
+}
+.events-strip__date span {
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.events-strip__title {
+  font-size: 1.35rem;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.25;
+}
+.events-strip__meta {
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.events-strip__cta { flex: 0 0 auto; white-space: nowrap; }
+
+.events-strip__soon {
+  margin-top: 1.6rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--ink-faint);
+}
+
+/* ---------- Courses ---------- */
+/* same centered flex-wrap trick as the services grid so any
+   short row stays centered */
+.courses__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+}
+.courses__grid .card {
+  flex: 1 1 250px;
+  max-width: 420px;
+}
+
+.course-card__level {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-top: 0.3rem;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+.course-meta li {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+}
+
+/* ---------- Why choose us ---------- */
+.whyus__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+.whyus__item {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.8rem 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.35s, border-color 0.35s, transform 0.35s var(--ease-out), box-shadow 0.35s;
+}
+.whyus__item:hover {
+  background: var(--glass-strong);
+  border-color: var(--glass-border-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+.whyus__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  font-size: 1.4rem;
+  border-radius: 16px;
+  color: var(--azure);
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  margin-bottom: 1rem;
+}
+.whyus__item h3 { font-size: 1.22rem; margin-bottom: 0.35rem; color: var(--ink); }
+.whyus__item p { font-size: 0.93rem; color: var(--ink-soft); margin: 0; }
+
+.whyus__stats {
+  margin-top: clamp(2.4rem, 5vw, 3.6rem);
+  display: flex;
+  justify-content: center;
+  gap: clamp(2rem, 6vw, 4.5rem);
+  text-align: center;
+}
+.whyus__stats li { display: grid; gap: 0.1rem; justify-items: center; }
+.whyus__stats strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 600;
+  color: var(--azure);
+  font-variant-numeric: tabular-nums;
+}
+.whyus__stats span {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------- FAQ ---------- */
+.faq__list {
+  max-width: 780px;
+  margin-inline: auto;
+  display: grid;
+  gap: 0.9rem;
+}
+.faq__item {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.35s, border-color 0.35s;
+  overflow: hidden;
+}
+.faq__item[open] {
+  background: var(--glass-strong);
+  border-color: var(--glass-border-accent);
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.15rem 1.4rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  line-height: 1.35;
+  color: var(--ink);
+  transition: color 0.3s;
+}
+.faq__question::-webkit-details-marker { display: none; }
+.faq__question::marker { content: ""; }
+.faq__question:hover { color: var(--sky); }
+.faq__question:focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: -2px;
+  border-radius: inherit;
+}
+
+/* + that rotates into × when the item opens */
+.faq__indicator {
+  position: relative;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border-accent);
+  background: rgba(0, 180, 255, 0.06);
+  transition: transform 0.35s var(--ease-out), background-color 0.35s;
+}
+.faq__indicator::before,
+.faq__indicator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.5px;
+  background: var(--azure);
+  transform: translate(-50%, -50%);
+}
+.faq__indicator::after { transform: translate(-50%, -50%) rotate(90deg); }
+.faq__item[open] .faq__indicator {
+  transform: rotate(45deg);
+  background: rgba(0, 180, 255, 0.14);
+}
+
+.faq__answer {
+  padding: 0 1.4rem 1.3rem;
+  font-size: 0.97rem;
+  color: var(--ink-soft);
+}
+.faq__answer p { margin: 0; }
+.faq__item[open] .faq__answer { animation: faq-open 0.45s var(--ease-out); }
+@keyframes faq-open {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* smooth height transition where supported (Chrome 131+);
+   everywhere else <details> opens instantly — still fine */
+@supports (interpolate-size: allow-keywords) {
+  .faq__item { interpolate-size: allow-keywords; }
+  .faq__item::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: content-visibility 0.4s allow-discrete, block-size 0.4s var(--ease-out);
+  }
+  .faq__item[open]::details-content { block-size: auto; }
+}
+
+/* ---------- New-section breakpoints ---------- */
+@media (max-width: 880px) {
+  .whyus__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .events-strip__event {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 1.6rem 1.3rem;
+  }
+  .events-strip__label { font-size: 0.7rem; letter-spacing: 0.24em; }
+  .events-strip__label::before,
+  .events-strip__label::after { display: none; }
+
+  .whyus__grid { grid-template-columns: 1fr; }
+  .whyus__stats { flex-direction: column; gap: 1.4rem; }
+
+  .faq__question { font-size: 1.08rem; padding: 1rem 1.1rem; }
+  .faq__answer { padding: 0 1.1rem 1.1rem; }
+}
+
+@media (max-width: 380px) {
+  .events-strip__title { font-size: 1.2rem; }
+  .course-meta li { font-size: 0.64rem; }
+}
