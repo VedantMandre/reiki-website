@@ -2,11 +2,10 @@
    Suved Healers — Healing from Within
    Immersive dark-cosmos redesign: a persistent Three.js particle
    universe (js/main.js) morphs between formations behind six
-   full-height chapters. Brand hues — the owner's ocean-blue
-   swatches (azure #00b4ff · cerulean #009edb · ocean #00709e)
-   over deep-sea grounds of the same hue. Antique gold survives
-   only on the badge emblem, so the logo glows as the single warm
-   object in a blue universe.
+   full-height chapters. Brand hues — antique gold, moonlit steel
+   blue, ivory, sage — glow against the deep navy ground of the
+   Suved Healers badge (#12161F), so the whole site blends with
+   the logo artwork.
 
    All content is visible without JS; motion is disabled under
    prefers-reduced-motion, and the WebGL layer degrades to the
@@ -15,34 +14,30 @@
 
 /* ---------- Tokens ---------- */
 :root {
-  /* Ocean-blue brand palette from the owner's swatches:
-     azure #00b4ff · cerulean #009edb · ocean #00709e. Grounds are
-     deep-sea darks of the same hue. The gold tokens remain solely
-     for the badge emblem's glow. */
-  --void: #071722;
-  --night: #0a2130;
-  --night-soft: #0f2b40;
-  --ink: #eaf6fe;
-  --ink-soft: #a5cce4;
-  --ink-faint: #6e97b1;
-  --azure: #00b4ff;
-  --cerulean: #009edb;
-  --ocean: #00709e;
-  --sky: #7fd4ff;
-  --ice: #cfeeff;
+  /* Ground colors are drawn from the badge artwork: #12161F is the
+     logo's own dark navy, so the emblem melts into the page. */
+  --void: #12161f;
+  --night: #171e2b;
+  --night-soft: #1e2836;
+  --ink: #ede8dc;
+  --ink-soft: #afb9c9;
+  --ink-faint: #7e8899;
+  --purple: #7f96c2;
+  --purple-deep: #2a3852;
+  --lilac: #b7c4dd;
   --gold: #d4a94f;
   --gold-bright: #e9c87e;
   --gold-pale: #f2dfae;
-  --sage: #94d6c8;
-  --white: #f7fcff;
+  --sage: #aab98c;
+  --white: #fffdf8;
 
-  --grad-blue: linear-gradient(120deg, #0087c4, #00b4ff 55%, #0087c4);
-  --grad-spirit: linear-gradient(115deg, #cfeeff 0%, #66ccff 45%, #00a1e0 100%);
+  --grad-gold: linear-gradient(120deg, #b8862e, #e9c87e 55%, #b8862e);
+  --grad-spirit: linear-gradient(115deg, #e9c87e 0%, #b7c4dd 55%, #7f96c2 100%);
 
-  --glass: rgba(207, 238, 255, 0.05);
-  --glass-strong: rgba(207, 238, 255, 0.09);
-  --glass-border: rgba(127, 212, 255, 0.16);
-  --glass-border-accent: rgba(0, 180, 255, 0.28);
+  --glass: rgba(237, 232, 220, 0.045);
+  --glass-strong: rgba(237, 232, 220, 0.08);
+  --glass-border: rgba(183, 196, 221, 0.16);
+  --glass-border-gold: rgba(233, 200, 126, 0.28);
 
   --font-display: "Cormorant Garamond", "Times New Roman", serif;
   --font-body: "Jost", "Segoe UI", sans-serif;
@@ -50,7 +45,7 @@
   --font-devanagari: "Mukta", "Nirmala UI", sans-serif;
 
   --shadow-soft: 0 24px 70px -24px rgba(0, 0, 0, 0.55);
-  --shadow-glow-accent: 0 0 40px -6px rgba(0, 158, 219, 0.35);
+  --shadow-glow-gold: 0 0 40px -6px rgba(212, 169, 79, 0.35);
   --radius: 22px;
   --nav-h: 84px;
 
@@ -78,28 +73,28 @@ body {
   line-height: 1.75;
   color: var(--ink-soft);
   background:
-    radial-gradient(1400px 900px at 78% -12%, rgba(0, 90, 138, 0.4), transparent 60%),
-    radial-gradient(1100px 800px at -12% 24%, rgba(0, 62, 96, 0.5), transparent 58%),
-    radial-gradient(900px 700px at 96% 70%, rgba(0, 112, 158, 0.14), transparent 60%),
+    radial-gradient(1400px 900px at 78% -12%, rgba(40, 56, 86, 0.4), transparent 60%),
+    radial-gradient(1100px 800px at -12% 24%, rgba(28, 38, 60, 0.5), transparent 58%),
+    radial-gradient(900px 700px at 96% 70%, rgba(122, 74, 42, 0.14), transparent 60%),
     var(--void);
   background-attachment: fixed;
   overflow-x: hidden;
 }
 
 img { max-width: 100%; display: block; }
-a { color: var(--sky); text-decoration: none; }
+a { color: var(--lilac); text-decoration: none; }
 /* the hidden attribute must win even over display:grid/flex rules
    (used by the review form and the admin moderation page) */
 [hidden] { display: none !important; }
 ul, ol { list-style: none; }
 strong { font-weight: 500; color: var(--ink); }
 
-::selection { background: var(--cerulean); color: var(--void); }
+::selection { background: var(--gold); color: var(--void); }
 
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--void); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(rgba(0, 158, 219, 0.55), rgba(0, 158, 219, 0.55));
+  background: linear-gradient(rgba(212, 169, 79, 0.55), rgba(127, 150, 194, 0.55));
   border-radius: 8px;
   border: 2px solid var(--void);
 }
@@ -146,7 +141,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(1000px 600px at 50% 40%, rgba(15, 43, 64, 0.5), transparent 72%);
+    radial-gradient(1000px 600px at 50% 40%, rgba(30, 39, 53, 0.5), transparent 72%);
   /* fade the veil out before it reaches the section edges so it
      never clips into a visible seam against the cosmos */
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
@@ -160,7 +155,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   top: -48px;
   left: 16px;
   z-index: 300;
-  background: var(--cerulean);
+  background: var(--gold);
   color: var(--void);
   padding: 0.6rem 1.2rem;
   border-radius: 0 0 10px 10px;
@@ -174,7 +169,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--azure);
+  color: var(--gold-bright);
   margin-bottom: 1.2rem;
 }
 
@@ -182,7 +177,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: clamp(2.3rem, 5vw, 3.7rem);
   margin-bottom: 1.5rem;
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 30px rgba(7, 23, 34, 0.8);
+  text-shadow: 0 2px 30px rgba(18, 22, 31, 0.8);
 }
 
 .section-sub { color: var(--ink-soft); max-width: 46ch; margin-inline: auto; }
@@ -219,29 +214,29 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 
 .btn--gold {
-  background: var(--grad-blue);
+  background: var(--grad-gold);
   background-size: 200% 100%;
-  color: #03293c;
+  color: #2b1d08;
   font-weight: 600;
-  box-shadow: 0 10px 34px -10px rgba(0, 158, 219, 0.55), inset 0 1px 0 rgba(255, 240, 200, 0.6);
+  box-shadow: 0 10px 34px -10px rgba(212, 169, 79, 0.55), inset 0 1px 0 rgba(255, 240, 200, 0.6);
 }
 .btn--gold:hover {
   background-position: 100% 0;
-  box-shadow: 0 16px 44px -8px rgba(0, 158, 219, 0.7), inset 0 1px 0 rgba(255, 240, 200, 0.6);
+  box-shadow: 0 16px 44px -8px rgba(212, 169, 79, 0.7), inset 0 1px 0 rgba(255, 240, 200, 0.6);
   transform: translateY(-2px);
 }
 
 .btn--ghost {
-  border-color: rgba(127, 212, 255, 0.4);
+  border-color: rgba(183, 196, 221, 0.4);
   color: var(--ink);
-  background: rgba(207, 238, 255, 0.04);
+  background: rgba(237, 232, 220, 0.04);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
 .btn--ghost:hover {
-  border-color: var(--azure);
-  color: var(--azure);
-  background: rgba(0, 180, 255, 0.06);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  background: rgba(233, 200, 126, 0.06);
   transform: translateY(-2px);
 }
 
@@ -255,7 +250,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   display: grid;
   place-items: center;
   background:
-    radial-gradient(900px 600px at 50% 32%, rgba(0, 90, 138, 0.35), transparent 62%),
+    radial-gradient(900px 600px at 50% 32%, rgba(40, 56, 86, 0.35), transparent 62%),
     var(--void);
   /* CSS-only fallback: if JS never runs, fade the veil away after 4s */
   animation: preloader-fallback 0.8s ease 4s forwards;
@@ -271,8 +266,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .preloader__lotus {
   width: 110px;
   margin-inline: auto;
-  color: var(--azure);
-  filter: drop-shadow(0 0 14px rgba(0, 180, 255, 0.45));
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 14px rgba(233, 200, 126, 0.45));
 }
 .preloader__lotus .lotus-path {
   stroke-dasharray: 220;
@@ -290,10 +285,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .preloader__word {
   font-family: var(--font-script);
   font-size: clamp(3rem, 8vw, 4.4rem);
-  color: var(--ice);
+  color: var(--gold-pale);
   line-height: 1;
   margin-top: 0.6rem;
-  text-shadow: 0 0 40px rgba(0, 180, 255, 0.35);
+  text-shadow: 0 0 40px rgba(233, 200, 126, 0.35);
 }
 .preloader__word span { display: inline-block; }
 
@@ -302,7 +297,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 0.8rem;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--sky);
+  color: var(--lilac);
   margin-top: 1rem;
 }
 
@@ -342,8 +337,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
     display: block;
     width: 9px;
     height: 9px;
-    background: var(--azure);
-    box-shadow: 0 0 14px rgba(0, 180, 255, 0.9);
+    background: var(--gold-bright);
+    box-shadow: 0 0 14px rgba(233, 200, 126, 0.9);
   }
   /* a soft luminous halo instead of a hollow ring — even when it
      trails the dot it reads as a comet glow, not stray UI */
@@ -351,13 +346,13 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
     display: block;
     width: 36px;
     height: 36px;
-    background: radial-gradient(circle, rgba(0, 180, 255, 0.22), transparent 70%);
+    background: radial-gradient(circle, rgba(233, 200, 126, 0.22), transparent 70%);
     transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s;
   }
   body.has-cursor .cursor-ring.is-hover {
     width: 60px;
     height: 60px;
-    background: radial-gradient(circle, rgba(0, 180, 255, 0.32), transparent 70%);
+    background: radial-gradient(circle, rgba(233, 200, 126, 0.32), transparent 70%);
   }
 }
 
@@ -372,10 +367,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   border-bottom: 1px solid transparent;
 }
 .nav.is-scrolled {
-  background: rgba(7, 23, 34, 0.72);
+  background: rgba(18, 22, 31, 0.72);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom-color: rgba(127, 212, 255, 0.12);
+  border-bottom-color: rgba(183, 196, 221, 0.12);
   box-shadow: 0 12px 40px -18px rgba(0, 0, 0, 0.7);
 }
 
@@ -392,21 +387,21 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   gap: 0.7rem;
 }
 
-/* The badge asset has a transparent ground (assets/suved-badge-glow.png),
-   so the emblem floats directly on the page — no framed box, just a
-   golden glow. */
 .nav__logo-mount {
   position: relative;
   display: inline-flex;
   width: 44px;
   height: 47px;
-  filter: drop-shadow(0 0 10px rgba(233, 200, 126, 0.4));
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(233, 200, 126, 0.4);
+  filter: drop-shadow(0 0 10px rgba(233, 200, 126, 0.35));
   flex: none;
 }
 .nav__logo {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .nav__brand-text {
@@ -446,13 +441,13 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   bottom: 0;
   width: 100%;
   height: 1.5px;
-  background: var(--grad-blue);
+  background: var(--grad-gold);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.4s var(--ease-out);
 }
 .nav__link:hover,
-.nav__link.is-active { color: var(--azure); }
+.nav__link.is-active { color: var(--gold-bright); }
 .nav__link:hover::after,
 .nav__link.is-active::after {
   transform: scaleX(1);
@@ -468,8 +463,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   gap: 6px;
   width: 46px;
   height: 46px;
-  background: rgba(207, 238, 255, 0.06);
-  border: 1px solid rgba(127, 212, 255, 0.25);
+  background: rgba(237, 232, 220, 0.06);
+  border: 1px solid rgba(183, 196, 221, 0.25);
   border-radius: 50%;
   cursor: pointer;
   align-items: center;
@@ -479,7 +474,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   display: block;
   width: 20px;
   height: 1.8px;
-  background: var(--ice);
+  background: var(--gold-pale);
   border-radius: 2px;
   transition: transform 0.35s var(--ease-out), opacity 0.25s;
 }
@@ -509,7 +504,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 480px;
   top: -10%;
   right: -8%;
-  background: radial-gradient(circle, rgba(0, 158, 219, 0.28), transparent 65%);
+  background: radial-gradient(circle, rgba(127, 150, 194, 0.28), transparent 65%);
   animation: orb-drift 14s ease-in-out infinite alternate;
 }
 .hero__orb--2 {
@@ -517,7 +512,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 400px;
   bottom: -12%;
   left: -10%;
-  background: radial-gradient(circle, rgba(0, 158, 219, 0.18), transparent 65%);
+  background: radial-gradient(circle, rgba(212, 169, 79, 0.18), transparent 65%);
   animation: orb-drift 18s ease-in-out infinite alternate-reverse;
 }
 .hero__orb--3 {
@@ -525,7 +520,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 300px;
   top: 40%;
   left: 44%;
-  background: radial-gradient(circle, rgba(0, 62, 96, 0.5), transparent 65%);
+  background: radial-gradient(circle, rgba(28, 38, 60, 0.5), transparent 65%);
   animation: orb-drift 22s ease-in-out infinite alternate;
 }
 
@@ -552,7 +547,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   line-height: 0.98;
   margin-bottom: 1.1rem;
   color: var(--white);
-  text-shadow: 0 4px 60px rgba(7, 23, 34, 0.9);
+  text-shadow: 0 4px 60px rgba(18, 22, 31, 0.9);
 }
 .hero__title-line { display: block; }
 
@@ -561,9 +556,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 400;
   font-style: normal;
   font-size: 0.72em;
-  color: var(--azure);
+  color: var(--gold-bright);
   margin-right: 0.08em;
-  text-shadow: 0 0 34px rgba(0, 180, 255, 0.5);
+  text-shadow: 0 0 34px rgba(233, 200, 126, 0.5);
 }
 
 .hero__devanagari {
@@ -597,7 +592,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 3vw, 2.5rem);
   font-weight: 600;
-  color: var(--azure);
+  color: var(--gold-bright);
   font-variant-numeric: tabular-nums;
 }
 .hero__stats span {
@@ -618,7 +613,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: 74%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 158, 219, 0.16), rgba(0, 158, 219, 0.1) 55%, transparent 72%);
+  background: radial-gradient(circle, rgba(212, 169, 79, 0.16), rgba(127, 150, 194, 0.1) 55%, transparent 72%);
   filter: blur(10px);
   animation: halo-pulse 6s ease-in-out infinite;
 }
@@ -630,15 +625,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 .mandala {
   width: min(420px, 78%);
-  color: rgba(127, 212, 255, 0.8);
+  color: rgba(183, 196, 221, 0.8);
   position: relative;
-  filter: drop-shadow(0 0 24px rgba(0, 158, 219, 0.3));
+  filter: drop-shadow(0 0 24px rgba(127, 150, 194, 0.3));
 }
 .mandala__svg { width: 100%; height: auto; animation: mandala-spin 90s linear infinite; }
 .mandala__petals { transform-origin: 200px 200px; animation: mandala-spin 60s linear infinite reverse; }
 .mandala__om {
   font-size: 44px;
-  fill: var(--azure);
+  fill: var(--gold-bright);
   font-family: var(--font-devanagari);
 }
 
@@ -665,7 +660,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .hero__scroll-line {
   width: 1.5px;
   height: 54px;
-  background: linear-gradient(var(--azure), transparent);
+  background: linear-gradient(var(--gold-bright), transparent);
   position: relative;
   overflow: hidden;
 }
@@ -673,7 +668,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--sky);
+  background: var(--lilac);
   transform: translateY(-100%);
   animation: scroll-hint 2.2s var(--ease-out) infinite;
 }
@@ -698,7 +693,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   left: 8%;
   right: 8%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(127, 212, 255, 0.28), transparent);
+  background: linear-gradient(90deg, transparent, rgba(183, 196, 221, 0.28), transparent);
   pointer-events: none;
 }
 .marquee::before { top: 0; }
@@ -717,9 +712,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-style: italic;
-  color: var(--sky);
+  color: var(--lilac);
 }
-.marquee__sep { color: var(--azure); font-size: 0.9rem; }
+.marquee__sep { color: var(--gold-bright); font-size: 0.9rem; }
 
 @keyframes marquee-scroll {
   to { transform: translateX(-50%); }
@@ -762,25 +757,24 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .portrait-frame__badge {
   white-space: nowrap;
-  background: var(--grad-blue);
-  color: #03293c;
+  background: var(--grad-gold);
+  color: #2b1d08;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0.5rem 1.3rem;
   border-radius: 999px;
-  box-shadow: 0 10px 30px -8px rgba(0, 158, 219, 0.55);
+  box-shadow: 0 10px 30px -8px rgba(212, 169, 79, 0.55);
 }
 
 /* ---------- Living badge (brand mark, animated) ----------
-   The mounted artwork is assets/suved-badge-glow.png — the original
-   badge with its dark ground converted to alpha, so the gold emblem
-   floats directly on the page and inherits whatever is behind it.
-   It is bathed in a golden radiance (gold is reserved for the badge;
-   everything else on the site is ocean blue). The glow never falls
-   below its bright resting state — it only swells brighter, so the
-   mark reads as shining gold at every point of the cycle. */
+   The badge artwork (assets/suved-badge.png) is a framed gold
+   emblem on a dark ground that matches the page (#12161F); it is
+   never recolored or cropped here, only mounted and bathed in a
+   golden radiance. The glow never falls below its bright resting
+   state — it only swells brighter, so the mark reads as shining
+   gold at every point of the cycle (no dim/"black out" phase). */
 
 /* Small variant — nav + footer brand icon: a golden shine that
    gently intensifies; no layered elements so it stays cheap when
@@ -820,11 +814,14 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   50%      { opacity: 1; transform: scale(1.07); }
 }
 
-/* frameless: the transparent-ground artwork floats in its golden halo */
 .badge-lg__stage {
   position: relative;
   width: 100%;
   aspect-ratio: 618 / 658;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(233, 200, 126, 0.4);
+  box-shadow: var(--shadow-glow-gold), 0 20px 50px -20px rgba(0, 0, 0, 0.6);
   animation: badgeBreathe 8s ease-in-out infinite;
 }
 @keyframes badgeBreathe {
@@ -842,7 +839,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .badge-lg__dust { position: absolute; inset: -18%; width: 136%; height: 136%; pointer-events: none; }
 
 .about__content p { margin-bottom: 1.1rem; color: var(--ink-soft); }
-.about__content p strong { color: var(--ice); }
+.about__content p strong { color: var(--gold-pale); }
 
 .about__highlights {
   margin-top: 2.4rem;
@@ -862,7 +859,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   place-items: center;
   font-size: 1.4rem;
   border-radius: 16px;
-  color: var(--azure);
+  color: var(--gold-bright);
   background: var(--glass-strong);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(8px);
@@ -884,7 +881,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: -30% 0;
-  background: radial-gradient(58% 78% at 50% 50%, rgba(10, 33, 48, 0.55), transparent 78%);
+  background: radial-gradient(58% 78% at 50% 50%, rgba(23, 30, 43, 0.55), transparent 78%);
   pointer-events: none;
 }
 .cert-strip__inner { position: relative; text-align: center; }
@@ -896,7 +893,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 0.75rem;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--ice);
+  color: var(--gold-pale);
   margin-bottom: 2.4rem;
 }
 /* hairlines flanking the label */
@@ -907,8 +904,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: min(150px, 18vw);
   flex: 0 0 auto;
 }
-.cert-strip__label::before { background: linear-gradient(to left, rgba(0, 180, 255, 0.45), transparent); }
-.cert-strip__label::after { background: linear-gradient(to right, rgba(0, 180, 255, 0.45), transparent); }
+.cert-strip__label::before { background: linear-gradient(to left, rgba(233, 200, 126, 0.45), transparent); }
+.cert-strip__label::after { background: linear-gradient(to right, rgba(233, 200, 126, 0.45), transparent); }
 
 .cert-strip__list {
   display: grid;
@@ -932,7 +929,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   transform: translateY(-50%);
   height: 72%;
   width: 1px;
-  background: linear-gradient(transparent, rgba(127, 212, 255, 0.25), transparent);
+  background: linear-gradient(transparent, rgba(183, 196, 221, 0.25), transparent);
 }
 .cert-strip__icon {
   width: 58px;
@@ -940,17 +937,17 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--azure);
-  border: 1px solid var(--glass-border-accent);
-  background: rgba(0, 180, 255, 0.06);
-  box-shadow: 0 0 26px -8px rgba(0, 158, 219, 0.4);
+  color: var(--gold-bright);
+  border: 1px solid var(--glass-border-gold);
+  background: rgba(233, 200, 126, 0.06);
+  box-shadow: 0 0 26px -8px rgba(212, 169, 79, 0.4);
   transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.35s;
 }
 .cert-strip__icon svg { width: 27px; height: 27px; }
 .cert-strip__badge:hover .cert-strip__icon {
   transform: translateY(-4px);
-  border-color: rgba(0, 180, 255, 0.6);
-  box-shadow: 0 10px 34px -8px rgba(0, 158, 219, 0.55);
+  border-color: rgba(233, 200, 126, 0.6);
+  box-shadow: 0 10px 34px -8px rgba(212, 169, 79, 0.55);
 }
 .cert-strip__name {
   font-size: 0.82rem;
@@ -1012,15 +1009,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .card:hover {
   background: var(--glass-strong);
-  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.7), var(--shadow-glow-accent);
-  border-color: var(--glass-border-accent);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.7), var(--shadow-glow-gold);
+  border-color: var(--glass-border-gold);
 }
 
 .card__glow {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(240px 240px at var(--glow-x, 50%) var(--glow-y, 50%), rgba(0, 180, 255, 0.14), transparent 70%);
+  background: radial-gradient(240px 240px at var(--glow-x, 50%) var(--glow-y, 50%), rgba(233, 200, 126, 0.14), transparent 70%);
   opacity: 0;
   transition: opacity 0.35s;
   pointer-events: none;
@@ -1029,9 +1026,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 .card--featured {
   background:
-    radial-gradient(420px 260px at 100% 0%, rgba(0, 158, 219, 0.16), transparent 65%),
+    radial-gradient(420px 260px at 100% 0%, rgba(127, 150, 194, 0.16), transparent 65%),
     var(--glass-strong);
-  border-color: rgba(127, 212, 255, 0.3);
+  border-color: rgba(183, 196, 221, 0.3);
 }
 
 .card__ribbon {
@@ -1039,8 +1036,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   top: 18px;
   right: -34px;
   transform: rotate(38deg);
-  background: var(--grad-blue);
-  color: #03293c;
+  background: var(--grad-gold);
+  color: #2b1d08;
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -1056,8 +1053,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   place-items: center;
   border-radius: 18px;
   margin-bottom: 1.3rem;
-  background: rgba(0, 180, 255, 0.08);
-  border: 1px solid var(--glass-border-accent);
+  background: rgba(233, 200, 126, 0.08);
+  border: 1px solid var(--glass-border-gold);
   transform: translateZ(34px);
 }
 
@@ -1079,7 +1076,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "✦";
   position: absolute;
   left: 0;
-  color: var(--azure);
+  color: var(--gold-bright);
   font-size: 0.75rem;
   top: 0.2em;
 }
@@ -1089,10 +1086,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   font-size: 0.94rem;
   letter-spacing: 0.04em;
-  color: var(--sky);
+  color: var(--lilac);
   transition: color 0.3s, letter-spacing 0.3s var(--ease-out);
 }
-.card__link:hover { color: var(--azure); letter-spacing: 0.08em; }
+.card__link:hover { color: var(--gold-bright); letter-spacing: 0.08em; }
 
 /* ---------- Flip Card Mechanics ---------- */
 .card--flip {
@@ -1145,7 +1142,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .card__back-title {
   font-family: var(--font-display);
   font-size: 1.25rem;
-  color: var(--azure);
+  color: var(--gold-bright);
   margin-top: 0.4rem;
   line-height: 1.1;
 }
@@ -1184,15 +1181,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   left: 4%;
   right: 4%;
   height: 2px;
-  background: rgba(127, 212, 255, 0.14);
+  background: rgba(183, 196, 221, 0.14);
   z-index: 0;
 }
 .journey__line::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--grad-blue);
-  box-shadow: 0 0 16px rgba(0, 180, 255, 0.5);
+  background: var(--grad-gold);
+  box-shadow: 0 0 16px rgba(233, 200, 126, 0.5);
   transform: scaleX(var(--journey-progress, 0));
   transform-origin: left;
 }
@@ -1216,10 +1213,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--azure);
-  background: rgba(10, 33, 48, 0.85);
-  border: 1.5px solid rgba(0, 158, 219, 0.55);
-  box-shadow: 0 0 24px -4px rgba(0, 158, 219, 0.4);
+  color: var(--gold-bright);
+  background: rgba(23, 30, 43, 0.85);
+  border: 1.5px solid rgba(212, 169, 79, 0.55);
+  box-shadow: 0 0 24px -4px rgba(212, 169, 79, 0.4);
   margin-bottom: 1.1rem;
 }
 
@@ -1242,8 +1239,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   position: absolute;
   inset: -20% -10%;
   background:
-    radial-gradient(460px 460px at 80% 60%, rgba(0, 158, 219, 0.1), transparent 60%),
-    radial-gradient(420px 420px at 15% 75%, rgba(0, 158, 219, 0.12), transparent 60%);
+    radial-gradient(460px 460px at 80% 60%, rgba(212, 169, 79, 0.1), transparent 60%),
+    radial-gradient(420px 420px at 15% 75%, rgba(127, 150, 194, 0.12), transparent 60%);
   -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 35%, transparent 95%);
   mask-image: radial-gradient(70% 70% at 50% 50%, #000 35%, transparent 95%);
   pointer-events: none;
@@ -1256,10 +1253,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: clamp(1.9rem, 4.6vw, 3.4rem);
   font-weight: 500;
   line-height: 1.32;
-  color: var(--ice);
+  color: var(--gold-pale);
   max-width: 26ch;
   margin-inline: auto;
-  text-shadow: 0 0 60px rgba(0, 180, 255, 0.25), 0 2px 30px rgba(7, 23, 34, 0.9);
+  text-shadow: 0 0 60px rgba(233, 200, 126, 0.25), 0 2px 30px rgba(18, 22, 31, 0.9);
 }
 .quoteband cite {
   display: block;
@@ -1269,7 +1266,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 0.85rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--sky);
+  color: var(--lilac);
 }
 
 /* ---------- Testimonials — Chapter V: constellations ---------- */
@@ -1293,16 +1290,16 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .testimonial:hover {
   background: var(--glass-strong);
-  border-color: var(--glass-border-accent);
-  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.7), var(--shadow-glow-accent);
+  border-color: var(--glass-border-gold);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.7), var(--shadow-glow-gold);
 }
 
 .testimonial__stars {
-  color: var(--azure);
+  color: var(--gold-bright);
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
   font-size: 0.95rem;
-  text-shadow: 0 0 12px rgba(0, 180, 255, 0.6);
+  text-shadow: 0 0 12px rgba(233, 200, 126, 0.6);
 }
 
 .testimonial blockquote {
@@ -1315,7 +1312,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 
 .testimonial figcaption { display: grid; }
-.testimonial figcaption strong { color: var(--ice); font-weight: 500; }
+.testimonial figcaption strong { color: var(--gold-pale); font-weight: 500; }
 .testimonial figcaption span {
   font-size: 0.8rem;
   letter-spacing: 0.12em;
@@ -1340,7 +1337,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ice);
+  color: var(--gold-pale);
   margin-bottom: 0.5rem;
 }
 /* stars are laid out row-reverse so "input:checked ~ label" lights the
@@ -1360,19 +1357,19 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .rating-input label {
   font-size: 2rem;
   line-height: 1;
-  color: rgba(207, 238, 255, 0.22);
+  color: rgba(237, 232, 220, 0.22);
   cursor: pointer;
   transition: color 0.2s, transform 0.2s var(--ease-out), text-shadow 0.2s;
 }
 .rating-input input:checked ~ label,
 .rating-input label:hover,
 .rating-input label:hover ~ label {
-  color: var(--azure);
-  text-shadow: 0 0 14px rgba(0, 180, 255, 0.5);
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px rgba(233, 200, 126, 0.5);
 }
 .rating-input label:hover { transform: scale(1.12); }
 .rating-input input:focus-visible + label {
-  outline: 2px solid var(--azure);
+  outline: 2px solid var(--gold-bright);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -1384,7 +1381,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .admin__auth { max-width: 430px; margin-inline: auto; }
 .admin__section { margin-top: 3rem; }
 .admin__section h2 { font-size: 1.6rem; margin-bottom: 1.2rem; color: var(--ink); }
-.admin__count { color: var(--azure); }
+.admin__count { color: var(--gold-bright); }
 .admin__grid { display: grid; gap: 1.2rem; }
 .admin__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.1rem; }
 .admin__actions .btn { padding: 0.55rem 1.3rem; font-size: 0.78rem; }
@@ -1415,7 +1412,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   place-items: center;
   font-size: 1.25rem;
   border-radius: 16px;
-  color: var(--azure);
+  color: var(--gold-bright);
   background: var(--glass-strong);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(8px);
@@ -1423,11 +1420,11 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .contact__channels h3 { font-size: 1.2rem; margin-bottom: 0.1rem; color: var(--ink); }
 .contact__channels a { display: block; width: fit-content; color: var(--ink-soft); transition: color 0.3s; }
-.contact__channels a:hover { color: var(--azure); }
+.contact__channels a:hover { color: var(--gold-bright); }
 .contact__channels p { color: var(--ink-soft); }
 
 .contact__form {
-  background: rgba(10, 33, 48, 0.55);
+  background: rgba(23, 30, 43, 0.55);
   border: 1px solid var(--glass-border);
   border-radius: calc(var(--radius) * 1.2);
   box-shadow: var(--shadow-soft);
@@ -1450,7 +1447,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ice);
+  color: var(--gold-pale);
 }
 .form-field input,
 .form-field select,
@@ -1459,8 +1456,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 1rem;
   font-weight: 300;
   color: var(--ink);
-  background: rgba(207, 238, 255, 0.05);
-  border: 1px solid rgba(127, 212, 255, 0.22);
+  background: rgba(237, 232, 220, 0.05);
+  border: 1px solid rgba(183, 196, 221, 0.22);
   border-radius: 12px;
   padding: 0.85rem 1rem;
   transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
@@ -1472,12 +1469,12 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .form-field select:focus,
 .form-field textarea:focus {
   outline: none;
-  border-color: var(--azure);
-  background: rgba(207, 238, 255, 0.08);
-  box-shadow: 0 0 0 4px rgba(0, 180, 255, 0.12);
+  border-color: var(--gold-bright);
+  background: rgba(237, 232, 220, 0.08);
+  box-shadow: 0 0 0 4px rgba(233, 200, 126, 0.12);
 }
 .form-field input::placeholder,
-.form-field textarea::placeholder { color: rgba(165, 204, 228, 0.45); }
+.form-field textarea::placeholder { color: rgba(175, 185, 201, 0.45); }
 
 .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
 
@@ -1497,7 +1494,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent, rgba(4, 15, 23, 0.92) 60%);
+  background: linear-gradient(to bottom, transparent, rgba(11, 14, 20, 0.92) 60%);
   pointer-events: none;
 }
 .footer .container { position: relative; }
@@ -1507,8 +1504,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: clamp(3.4rem, 11vw, 8rem);
   line-height: 1.1;
   text-align: center;
-  color: rgba(0, 180, 255, 0.1);
-  text-shadow: 0 0 60px rgba(0, 180, 255, 0.12);
+  color: rgba(233, 200, 126, 0.1);
+  text-shadow: 0 0 60px rgba(233, 200, 126, 0.12);
   user-select: none;
   pointer-events: none;
   margin-bottom: clamp(1.4rem, 4vw, 2.8rem);
@@ -1525,7 +1522,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .footer__brand { display: inline-flex; align-items: center; gap: 0.7rem; }
 .footer__brand .nav__brand-text { color: var(--ink); }
 .footer__brand .nav__brand-text em {
-  background: linear-gradient(115deg, #00b4ff, #cfeeff);
+  background: linear-gradient(115deg, #d4a94f, #f2dfae);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1538,7 +1535,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   letter-spacing: 0.08em;
   transition: color 0.3s;
 }
-.footer__links a:hover { color: var(--azure); }
+.footer__links a:hover { color: var(--gold-bright); }
 
 .footer__copy {
   font-size: 0.85rem;
@@ -1549,7 +1546,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   margin-top: 0.3rem;
   font-family: var(--font-devanagari);
   letter-spacing: 0.18em;
-  color: rgba(0, 180, 255, 0.4);
+  color: rgba(233, 200, 126, 0.4);
 }
 
 /* ---------- WhatsApp FAB + healer chooser ---------- */
@@ -1607,7 +1604,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--ink);
-  background: rgba(10, 33, 48, 0.92);
+  background: rgba(23, 30, 43, 0.92);
   border: 1px solid rgba(37, 211, 102, 0.55);
   border-radius: 999px;
   padding: 0.55rem 1.2rem;
@@ -1656,8 +1653,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
     padding: calc(var(--nav-h) + 1rem) 1.5rem 2rem;
     overflow-y: auto;
     background:
-      radial-gradient(700px 500px at 70% 20%, rgba(0, 90, 138, 0.45), transparent 60%),
-      rgba(7, 23, 34, 0.97);
+      radial-gradient(700px 500px at 70% 20%, rgba(40, 56, 86, 0.45), transparent 60%),
+      rgba(18, 22, 31, 0.97);
     transform: translateY(-100%);
     /* visibility/opacity keep the closed menu fully hidden even if an
        ancestor transform ever confines the fixed overlay (defense in depth). */
@@ -1763,7 +1760,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   content: "";
   position: absolute;
   inset: -30% 0;
-  background: radial-gradient(58% 78% at 50% 50%, rgba(10, 33, 48, 0.55), transparent 78%);
+  background: radial-gradient(58% 78% at 50% 50%, rgba(23, 30, 43, 0.55), transparent 78%);
   pointer-events: none;
 }
 .events-strip__inner { position: relative; }
@@ -1776,7 +1773,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-size: 0.75rem;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--ice);
+  color: var(--gold-pale);
   margin-bottom: 2rem;
 }
 .events-strip__label::before,
@@ -1786,8 +1783,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: min(150px, 18vw);
   flex: 0 0 auto;
 }
-.events-strip__label::before { background: linear-gradient(to left, rgba(0, 180, 255, 0.45), transparent); }
-.events-strip__label::after { background: linear-gradient(to right, rgba(0, 180, 255, 0.45), transparent); }
+.events-strip__label::before { background: linear-gradient(to left, rgba(233, 200, 126, 0.45), transparent); }
+.events-strip__label::after { background: linear-gradient(to right, rgba(233, 200, 126, 0.45), transparent); }
 
 .events-strip__event {
   display: grid;
@@ -1798,7 +1795,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   margin-inline: auto;
   padding: 1.5rem 1.8rem;
   background: var(--glass-strong);
-  border: 1px solid var(--glass-border-accent);
+  border: 1px solid var(--glass-border-gold);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px);
@@ -1814,16 +1811,16 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: 76px;
   height: 76px;
   border-radius: 18px;
-  background: rgba(0, 180, 255, 0.06);
-  border: 1px solid var(--glass-border-accent);
-  box-shadow: 0 0 26px -8px rgba(0, 158, 219, 0.4);
+  background: rgba(233, 200, 126, 0.06);
+  border: 1px solid var(--glass-border-gold);
+  box-shadow: 0 0 26px -8px rgba(212, 169, 79, 0.4);
 }
 .events-strip__date strong {
   font-family: var(--font-display);
   font-size: 1.9rem;
   font-weight: 600;
   line-height: 1;
-  color: var(--azure);
+  color: var(--gold-bright);
   font-variant-numeric: tabular-nums;
 }
 .events-strip__date span {
@@ -1877,7 +1874,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 500;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--sky);
+  color: var(--lilac);
   margin-top: 0.3rem;
 }
 
@@ -1917,7 +1914,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .whyus__item:hover {
   background: var(--glass-strong);
-  border-color: var(--glass-border-accent);
+  border-color: var(--glass-border-gold);
   transform: translateY(-4px);
   box-shadow: var(--shadow-soft);
 }
@@ -1928,7 +1925,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   height: 52px;
   font-size: 1.4rem;
   border-radius: 16px;
-  color: var(--azure);
+  color: var(--gold-bright);
   background: var(--glass-strong);
   border: 1px solid var(--glass-border);
   margin-bottom: 1rem;
@@ -1948,7 +1945,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 3vw, 2.5rem);
   font-weight: 600;
-  color: var(--azure);
+  color: var(--gold-bright);
   font-variant-numeric: tabular-nums;
 }
 .whyus__stats span {
@@ -1976,7 +1973,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .faq__item[open] {
   background: var(--glass-strong);
-  border-color: var(--glass-border-accent);
+  border-color: var(--glass-border-gold);
 }
 
 .faq__question {
@@ -1995,9 +1992,9 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .faq__question::-webkit-details-marker { display: none; }
 .faq__question::marker { content: ""; }
-.faq__question:hover { color: var(--sky); }
+.faq__question:hover { color: var(--gold-bright); }
 .faq__question:focus-visible {
-  outline: 2px solid var(--azure);
+  outline: 2px solid var(--gold-bright);
   outline-offset: -2px;
   border-radius: inherit;
 }
@@ -2009,8 +2006,8 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 1px solid var(--glass-border-accent);
-  background: rgba(0, 180, 255, 0.06);
+  border: 1px solid var(--glass-border-gold);
+  background: rgba(233, 200, 126, 0.06);
   transition: transform 0.35s var(--ease-out), background-color 0.35s;
 }
 .faq__indicator::before,
@@ -2021,13 +2018,13 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   left: 50%;
   width: 12px;
   height: 1.5px;
-  background: var(--azure);
+  background: var(--gold-bright);
   transform: translate(-50%, -50%);
 }
 .faq__indicator::after { transform: translate(-50%, -50%) rotate(90deg); }
 .faq__item[open] .faq__indicator {
   transform: rotate(45deg);
-  background: rgba(0, 180, 255, 0.14);
+  background: rgba(233, 200, 126, 0.14);
 }
 
 .faq__answer {
