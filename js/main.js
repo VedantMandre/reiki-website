@@ -658,13 +658,13 @@
       return arr;
     }
 
-    /* palette matches the badge-navy theme: antique gold, moonlit
-       steel blue, and ivory (see css/style.css tokens) */
-    var fGalaxy        = { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#7f96c2", "#b7c4dd", "#fdf6e3"]) };
-    var fLotus         = { pos: makeLotus(),         col: makeColors(["#f2dfae", "#b7c4dd", "#e9c87e", "#fdf3d9"]) };
-    var fMandala       = { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#b7c4dd", "#aab98c"]) };
-    var fHelix         = { pos: makeHelix(),         col: makeColors(["#7f96c2", "#b7c4dd", "#e9c87e", "#e8edf6"]) };
-    var fConstellation = { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#b7c4dd", "#ffffff"]) };
+    /* palette matches the badge royal-blue theme: antique gold,
+       royal-sapphire blue, and ivory (see css/style.css tokens) */
+    var fGalaxy        = { pos: makeGalaxy(),        col: makeColors(["#e9c87e", "#5f7fe0", "#a9c1f0", "#fdf6e3"]) };
+    var fLotus         = { pos: makeLotus(),         col: makeColors(["#f2dfae", "#a9c1f0", "#e9c87e", "#fdf3d9"]) };
+    var fMandala       = { pos: makeMandala(),       col: makeColors(["#e9c87e", "#d4a94f", "#a9c1f0", "#aab98c"]) };
+    var fHelix         = { pos: makeHelix(),         col: makeColors(["#5f7fe0", "#a9c1f0", "#e9c87e", "#e8edf6"]) };
+    var fConstellation = { pos: makeConstellation(), col: makeColors(["#fdf6e3", "#e9c87e", "#a9c1f0", "#ffffff"]) };
     var fOrb           = { pos: makeOrb(),           col: makeColors(["#ffd98a", "#e9c87e", "#d4a94f", "#fff3d6"]) };
 
     /* one formation per chapter, in page order — chapters and
