@@ -414,13 +414,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   color: var(--ink);
   letter-spacing: 0.02em;
 }
-/* header brand is text-only: a bold gold rule beneath the wordmark
-   (the footer keeps the emblem, so this is scoped to the nav) */
-.nav__brand .nav__brand-text {
+/* header and footer brands are text-only: a bold gold rule
+   beneath the wordmark */
+.nav__brand .nav__brand-text,
+.footer__brand .nav__brand-text {
   display: inline-block;
   padding-bottom: 0.3rem;
 }
-.nav__brand .nav__brand-text::after {
+.nav__brand .nav__brand-text::after,
+.footer__brand .nav__brand-text::after {
   content: "";
   display: block;
   height: 4px;

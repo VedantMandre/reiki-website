@@ -995,12 +995,12 @@
   <!-- ===== Footer ===== -->
   <footer class="footer">
     <div class="container">
-      <p class="footer__wordmark" aria-hidden="true" data-split>Suved Healers</p>
+      <!-- no data-split here: the split's transformed line layer can
+           composite as a faint rectangle over the WebGL cosmos on some
+           GPUs, and a watermark needs no reveal animation -->
+      <p class="footer__wordmark" aria-hidden="true">Suved Healers</p>
       <div class="footer__inner">
         <a href="#home" class="footer__brand" data-magnetic>
-          <span class="nav__logo-mount emblem-sm">
-            <img src="assets/suved-badge.png" alt="Suved Healers logo" class="nav__logo" width="44" height="47" loading="lazy" />
-          </span>
           <span class="nav__brand-text">Suved <em>Healers</em></span>
         </a>
         <nav class="footer__links" aria-label="Footer navigation">
