@@ -1535,19 +1535,6 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .footer .container { position: relative; }
 
-.footer__wordmark {
-  font-family: var(--font-script);
-  font-size: clamp(3.4rem, 11vw, 8rem);
-  line-height: 1.1;
-  text-align: center;
-  color: rgba(233, 200, 126, 0.1);
-  text-shadow: 0 0 60px rgba(233, 200, 126, 0.12);
-  user-select: none;
-  pointer-events: none;
-  margin-bottom: clamp(1.4rem, 4vw, 2.8rem);
-  white-space: nowrap;
-}
-
 .footer__inner {
   display: grid;
   justify-items: center;
@@ -1740,8 +1727,6 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
   .about__highlights li,
   .contact__channels li { gap: 0.85rem; }
-
-  .footer__wordmark { white-space: normal; }
 }
 
 @media (max-width: 380px) {
