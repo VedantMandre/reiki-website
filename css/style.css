@@ -153,16 +153,18 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 
 .skip-link {
   position: absolute;
-  top: -48px;
+  top: 0;
   left: 16px;
   z-index: 300;
   background: var(--gold);
   color: var(--void);
   padding: 0.6rem 1.2rem;
   border-radius: 0 0 10px 10px;
-  transition: top 0.25s var(--ease-out);
+  /* fully off-canvas regardless of its rendered height */
+  transform: translateY(-110%);
+  transition: transform 0.25s var(--ease-out);
 }
-.skip-link:focus { top: 0; }
+.skip-link:focus { transform: translateY(0); }
 
 /* ---------- Shared text pieces ---------- */
 .eyebrow {
@@ -411,6 +413,21 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   font-weight: 600;
   color: var(--ink);
   letter-spacing: 0.02em;
+}
+/* header brand is text-only: a bold gold rule beneath the wordmark
+   (the footer keeps the emblem, so this is scoped to the nav) */
+.nav__brand .nav__brand-text {
+  display: inline-block;
+  padding-bottom: 0.3rem;
+}
+.nav__brand .nav__brand-text::after {
+  content: "";
+  display: block;
+  height: 4px;
+  margin-top: 0.15rem;
+  border-radius: 2px;
+  background: var(--grad-gold);
+  box-shadow: 0 2px 12px -2px rgba(212, 169, 79, 0.6);
 }
 .nav__brand-text em {
   font-style: italic;
@@ -722,6 +739,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 
 /* ---------- About — Chapter II: the lotus ---------- */
+/* This chapter reads cooler than the rest of the site: the eyebrow
+   and headline gradient go periwinkle-blue so the gold is reserved
+   for the emblem, badges, and keyword highlights. */
+.about .eyebrow { color: var(--lilac); }
+.about .text-gradient {
+  /* background-image only — the shorthand would reset background-clip: text */
+  background-image: linear-gradient(100deg, #eaf1ff 0%, #aec1ef 48%, #6b87e0 100%);
+}
+
 .about__grid {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
@@ -729,8 +755,10 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   align-items: center;
 }
 
-/* Frameless: the transparent-cut emblem floats in the cosmos,
-   with the badge beneath it. */
+/* The plaque artwork (assets/suved-badge-cut.png) is pre-cropped to the
+   gold frame's outer edge, so it mounts directly on the cosmos with no
+   blending tricks; overflow stays visible so the halo and dust aren't
+   clipped into straight-edged seams. */
 .portrait-frame {
   position: relative;
   display: grid;
@@ -746,16 +774,15 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 }
 .portrait-frame__art {
   width: min(360px, 92%);
-  /* only a soft golden radiance now — the old dark box-shadow made the
-     emblem read as a pasted card; the merge relies on no hard edge */
-  filter: drop-shadow(0 0 46px rgba(233, 200, 126, 0.34));
+  /* a tight golden radiance hugging the plaque edge */
+  filter: drop-shadow(0 0 28px rgba(233, 200, 126, 0.38));
   transform: translateZ(40px);
 }
 .portrait-frame__badges {
   transform: translateZ(24px);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 0.6rem;
 }
 .portrait-frame__badge {
@@ -820,22 +847,7 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .badge-lg__stage {
   position: relative;
   width: 100%;
-  /* No card chrome: the artwork already carries its own gilded frame,
-     so we drop the extra border/radius/box (which was clipping the
-     logo's own frame corners and cropping "EST 2026"). Instead the
-     full emblem shows uncropped and its rectangular edge is feathered
-     away, so — because the logo's royal-blue ground matches the page —
-     the mark dissolves into the site's own cosmos rather than sitting
-     on it as a pasted card. */
   animation: badgeBreathe 8s ease-in-out infinite;
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
-  mask-composite: intersect;
 }
 @keyframes badgeBreathe {
   0%, 100% { transform: scale(1); }
@@ -845,14 +857,13 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
   display: block;
   width: 100%;
   height: auto;
-  /* a soft golden radiance hugs the feathered emblem in place of the
-     old rectangular drop-shadow */
-  filter: drop-shadow(0 0 26px rgba(233, 200, 126, 0.30));
+  border-radius: 6px;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6);
   user-select: none;
   -webkit-user-drag: none;
 }
 
-.badge-lg__dust { position: absolute; inset: -18%; width: 136%; height: 136%; pointer-events: none; }
+.badge-lg__dust { position: absolute; inset: -8%; width: 116%; height: 116%; pointer-events: none; }
 
 .about__content p { margin-bottom: 1.1rem; color: var(--ink-soft); }
 .about__content p strong { color: var(--gold-pale); }
@@ -860,29 +871,36 @@ main, .nav, .footer, .whatsapp-fab, .marquee { position: relative; z-index: 1; }
 .about__highlights {
   margin-top: 2.4rem;
   display: grid;
-  gap: 1.4rem;
+  gap: 1.5rem;
 }
 .about__highlights li {
   display: flex;
-  gap: 1.1rem;
+  gap: 1rem;
   align-items: flex-start;
 }
 .about__icon {
   flex: 0 0 auto;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
-  font-size: 1.4rem;
-  border-radius: 16px;
+  font-size: 1.15rem;
+  border-radius: 12px;
   color: var(--gold-bright);
-  background: var(--glass-strong);
-  border: 1px solid var(--glass-border);
+  background: rgba(150, 170, 235, 0.08);
+  border: 1px solid rgba(150, 170, 235, 0.22);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.about__highlights h3 { font-size: 1.25rem; margin-bottom: 0.15rem; color: var(--ink); }
-.about__highlights p { font-size: 0.96rem; margin: 0; }
+.about__highlights h3 {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.1rem;
+  color: var(--white);
+}
+.about__highlights p { font-size: 0.92rem; margin: 0; color: var(--ink-faint); }
 
 /* ---------- Cert strip ---------- */
 /* Floats directly in the cosmos — a soft elliptical veil (fully
